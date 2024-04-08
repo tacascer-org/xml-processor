@@ -37,8 +37,8 @@ tasks.sonar {
 
 sonar {
     properties {
-        property("sonar.projectKey", "xml_processor")
-        property("sonar.organization", "tim-tran")
+        property("sonar.projectKey", "tacascer-org_xml-processor")
+        property("sonar.organization", "tacascer-org")
         property("sonar.host.url", "https://sonarcloud.io")
         property(
             "sonar.coverage.jacoco.xmlReportPaths",
