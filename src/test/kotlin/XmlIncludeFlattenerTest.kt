@@ -1,5 +1,5 @@
 
-import io.github.tacascer.XmlFlattener
+import io.github.tacascer.XmlIncludeFlattener
 import io.kotest.core.spec.style.FunSpec
 import io.kotest.engine.spec.tempdir
 import io.kotest.matchers.shouldBe
@@ -7,7 +7,7 @@ import org.intellij.lang.annotations.Language
 import kotlin.io.path.createFile
 import kotlin.io.path.writeText
 
-class XmlFlattenerTest : FunSpec({
+class XmlIncludeFlattenerTest : FunSpec({
     test("given one xsd that includes another xsd, should return a single xsd with all elements") {
         val testDir = tempdir()
         val includingFile = testDir.toPath().resolve("sample.xsd").createFile()
@@ -37,6 +37,6 @@ class XmlFlattenerTest : FunSpec({
             <xs:element name="sampleOne" type="xs:string" />
         </xs:schema>
         """.trimIndent()
-        XmlFlattener(includingFile).process().trimIndent() shouldBe  expectedText
+        XmlIncludeFlattener(includingFile).process().trimIndent() shouldBe  expectedText
     }
 })
