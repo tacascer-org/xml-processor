@@ -8,14 +8,14 @@ import kotlin.io.path.createFile
 import kotlin.io.path.writeText
 
 class XmlFlattenerTest : FunSpec({
-    test("given two files on the same directory, the XmlFlattener should merge them into a single file") {
+    test("given one xsd that includes another xsd, should return a single xsd with all elements") {
         val testDir = tempdir()
         val includingFile = testDir.toPath().resolve("sample.xsd").createFile()
         val includedFile = testDir.toPath().resolve("sample_1.xsd").createFile()
         @Language("XML") val includingFileText = """
         <?xml version="1.0" encoding="UTF-8"?>
         <xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema" targetNamespace="http://www.sample.com">
-            <xs:include schemaLocation="sample_1.xsd"/>
+            <xs:include schemaLocation="${testDir.toPath().resolve("sample_1.xsd").toUri()}"/>
             <xs:element name="sample" type="xs:string"/>
         </xs:schema>
         """.trimIndent()
