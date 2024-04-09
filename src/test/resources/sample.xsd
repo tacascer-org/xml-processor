@@ -1,0 +1,5 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<xs:schema targetNamespace="http://www.sample.com" xmlns:xs="http://www.w3.org/2001/XMLSchema">
+    <xs:import namespace="http://www.sample.1.com" schemaLocation="file:/sample_1.xsd"/>
+    <xs:element name="sample" type="xs:string"/>
+</xs:schema>
