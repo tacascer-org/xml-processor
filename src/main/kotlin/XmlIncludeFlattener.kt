@@ -47,17 +47,20 @@ class XmlIncludeFlattener(private val input: Path, format: Format = Format.getPr
         val output = inputDocument.clone()
         val includeElements = output.getDescendants(Filters.element()).filter { it.name == "include" }
         includeElements.forEach(Element::detach)
-        includeElements.forEach { inline(it, output) }
+        includeElements.map {
+            val includedSchema = it.getAttributeValue("schemaLocation")
+            logger.info { "Processing included schema: $includedSchema" }
+            val includedDocument = saxBuilder.build(URI(includedSchema).toPath().inputStream())
+            inline(includedDocument)
+        }.forEach { includedDocument ->
+            output.rootElement.addContent(includedDocument.rootElement.getDescendants(Filters.element()).map(Element::clone))
+        }
         return output
     }
 
-    private fun inline(include: Element, output: Document) {
-        val includedSchema = include.getAttributeValue("schemaLocation")
-        logger.info { "Processing included schema: $includedSchema" }
-        val includedDocument = saxBuilder.build(URI(includedSchema).toPath().inputStream())
-        val inlinedDocument = process(includedDocument)
-        val inlinedElements = inlinedDocument.rootElement.getDescendants(Filters.element()).toList()
-        inlinedElements.forEach(Element::detach)
-        inlinedElements.forEach<Element?>(output.rootElement::addContent)
+    private fun inline(input: Document): Document {
+        val inlinedDocument = process(input)
+        val output = inlinedDocument.clone()
+        return output
     }
 }
