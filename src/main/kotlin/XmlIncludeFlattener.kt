@@ -1,6 +1,7 @@
 package io.github.tacascer
 
 import io.github.oshai.kotlinlogging.KotlinLogging
+import org.jdom2.Document
 import org.jdom2.Element
 import org.jdom2.filter.Filters
 import org.jdom2.input.SAXBuilder
@@ -35,27 +36,37 @@ class XmlIncludeFlattener(private val input: Path, format: Format = Format.getPr
      * @throws Exception if an error occurs during processing
      */
     fun process(): String {
-        doProcess()
+        val output = process(inputDocument)
         return StringWriter().use {
-            outputter.output(inputDocument, it)
+            outputter.output(output, it)
             it.toString()
         }
     }
 
-    private fun doProcess() {
-        inputDocument.getDescendants(Filters.element()).filter { it.name == "include" }.forEach {
-            it.detach()
-            inlineInclude(it)
-        }
+    private fun process(inputDocument: Document): Document {
+        val output = inputDocument.clone()
+        val includeElements = output.getDescendants(Filters.element()).filter { it.name == "include" }
+        includeElements.forEach(Element::detach)
+        includeElements
+            .map { it.toDocument().inline() }
+            .forEach { includedDocument ->
+                output.rootElement.addContent(
+                    includedDocument.rootElement.getDescendants(Filters.element()).map(Element::clone)
+                )
+            }
+        return output
     }
 
-    private fun inlineInclude(include: Element) {
-        val includedSchema = include.getAttributeValue("schemaLocation")
+    private fun Element.toDocument(): Document {
+        val includedSchema = getAttributeValue("schemaLocation")
         logger.info { "Processing included schema: $includedSchema" }
         val includedDocument = saxBuilder.build(URI(includedSchema).toPath().inputStream())
-        includedDocument.rootElement.getDescendants(Filters.element()).toList().forEach {
-            it.detach()
-            inputDocument.rootElement.addContent(it)
-        }
+        return includedDocument
+    }
+
+    private fun Document.inline(): Document {
+        val inlinedDocument = process(this)
+        val output = inlinedDocument.clone()
+        return output
     }
 }
