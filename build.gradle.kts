@@ -14,8 +14,12 @@ repositories {
 }
 
 val kotestVersion = "5.8.1"
+val jdomVersion = "2.0.6.1"
+val jetbrainsAnnotationVersion = "24.1.0"
 
 dependencies {
+    compileOnly("org.jetbrains:annotations:$jetbrainsAnnotationVersion")
+    implementation("org.jdom:jdom2:$jdomVersion")
     testImplementation("io.kotest:kotest-runner-junit5-jvm:$kotestVersion")
     testImplementation(kotlin("test"))
 }
