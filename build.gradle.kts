@@ -69,7 +69,7 @@ sonar {
 }
 
 mavenPublishing {
-    publishToMavenCentral(SonatypeHost.CENTRAL_PORTAL)
+    publishToMavenCentral(SonatypeHost.DEFAULT)
     signAllPublications()
     coordinates("$group", name, "$version")
     pom {
