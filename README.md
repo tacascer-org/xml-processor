@@ -7,7 +7,7 @@
 # xml-processor
 A set of utilities to process XML files.
 
-## Flatten `xs:includes`
+## `XMLIncludeFlattener`
 
 The `XMLIncludeFlattener` is a utility class in the `xml-processor` project. It is designed to process XML files that include other XML files using the `xs:include` tag. The class reads an XML file and inlines all the included files into the main XML file.
 
@@ -58,3 +58,41 @@ If you use `XMLIncludeFlattener` to process `sample.xsd`, the result will be:
 
 As you can see, the `xs:include` tag has been replaced with the content of the included file.
 
+### Handling Different Namespaces
+
+The `XMLIncludeFlattener` class is designed to handle XML files that include other XML files from different namespaces. When processing, it inlines all the included files into the main XML file, regardless of their original namespaces.
+
+However, it's important to note that the final namespace of the processed XML file will be that of the input file. This means that all the elements from the included files will be brought into the namespace of the input file.
+
+Here's an example:
+
+Consider the following XML files:
+
+`sampleDir/sample.xsd`
+```xml
+<?xml version="1.0" encoding="UTF-8"?>
+<xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema" targetNamespace="http://www.sample.com">
+    <xs:include schemaLocation="sample_1.xsd"/>
+    <xs:element name="sample" type="xs:string"/>
+</xs:schema>
+```
+
+`sampleDir/sample_1.xsd`
+```xml
+<?xml version="1.0" encoding="UTF-8"?>
+<xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema" targetNamespace="http://www.different.com">
+    <xs:element name="sample_1" type="xs:string"/>
+</xs:schema>
+```
+
+If you use `XMLIncludeFlattener` to process `sample.xsd`, the result will be:
+
+```xml
+<?xml version="1.0" encoding="UTF-8"?>
+<xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema" targetNamespace="http://www.sample.com">
+    <xs:element name="sample" type="xs:string"/>
+    <xs:element name="sample_1" type="xs:string"/>
+</xs:schema>
+```
+
+As you can see, even though `sample_1.xsd` was in a different namespace (`http://www.different.com`), after processing, the `sample_1` element is in the same namespace as the input file (`http://www.sample.com`). This is because the `XMLIncludeFlattener` brings all included elements into the namespace of the input file.
