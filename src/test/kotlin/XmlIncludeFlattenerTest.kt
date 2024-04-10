@@ -61,6 +61,28 @@ class XmlIncludeFlattenerTest : FunSpec({
 
             XmlIncludeFlattener(includingFile).process().trimIndent() shouldBe expectedText
         }
+
+        test("given one xsd that includes another with a different namespace, should return a single xsd with all elements whose targetNamespace is the input xsd") {
+            @Language("XML") val includingFileText = """
+            <?xml version="1.0" encoding="UTF-8"?>
+            <xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema" targetNamespace="http://www.sample.com">
+                <xs:include schemaLocation="${testDir.toPath().resolve("sample_1.xsd").toUri()}"/>
+                <xs:element name="sample" type="xs:string"/>
+            </xs:schema>
+            """.trimIndent()
+            includingFile.writeText(
+                includingFileText
+            )
+            @Language("XML") val includedFileText = """
+            <?xml version="1.0" encoding="UTF-8"?>
+            <xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema" targetNamespace="http://www.sample1.com">
+                <xs:element name="sampleOne" type="xs:string"/>
+            </xs:schema>
+            """.trimIndent()
+            includedFile.writeText(includedFileText)
+
+            XmlIncludeFlattener(includingFile).process().trimIndent() shouldBe expectedText
+        }
     }
 
     test("given one xsd that includes another xsd that includes another, then should return a single xsd with all elements") {
