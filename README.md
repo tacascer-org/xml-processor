@@ -7,9 +7,9 @@
 # xml-processor
 A set of utilities to process XML files.
 
-## `XMLIncludeFlattener`
+## Flatten `xs:include`s
 
-The `XMLIncludeFlattener` is a utility class in the `xml-processor` project. It is designed to process XML files that include other XML files using the `xs:include` tag. The class reads an XML file and inlines all the included files into the main XML file.
+The `XMLIncludeFlattener` is a utility class in the `xml-processor` project. It is designed to recursively process XML files that include other XML files using the `xs:include` tag. The class reads an XML file and inlines all the included files into the main XML file.
 
 ### Usage
 
