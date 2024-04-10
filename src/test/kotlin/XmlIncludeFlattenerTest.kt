@@ -11,6 +11,15 @@ class XmlIncludeFlattenerTest : FunSpec({
         val testDir = tempdir()
         val includingFile = testDir.toPath().resolve("sample.xsd").createFile()
         val includedFile = testDir.toPath().resolve("sample_1.xsd").createFile()
+
+        @Language("XML") val expectedText = """
+        <?xml version="1.0" encoding="UTF-8"?>
+        <xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema" targetNamespace="http://www.sample.com">
+            <xs:element name="sample" type="xs:string" />
+            <xs:element name="sampleOne" type="xs:string" />
+        </xs:schema>
+        """.trimIndent()
+
         test("given one xsd that includes another xsd through URI, should return a single xsd with all elements") {
             @Language("XML") val includingFileText = """
             <?xml version="1.0" encoding="UTF-8"?>
@@ -19,9 +28,7 @@ class XmlIncludeFlattenerTest : FunSpec({
                 <xs:element name="sample" type="xs:string"/>
             </xs:schema>
             """.trimIndent()
-            includingFile.writeText(
-                includingFileText
-            )
+            includingFile.writeText(includingFileText)
             @Language("XML") val includedFileText = """
             <?xml version="1.0" encoding="UTF-8"?>
             <xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema">
@@ -30,13 +37,6 @@ class XmlIncludeFlattenerTest : FunSpec({
             """.trimIndent()
             includedFile.writeText(includedFileText)
 
-            @Language("XML") val expectedText = """
-            <?xml version="1.0" encoding="UTF-8"?>
-            <xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema" targetNamespace="http://www.sample.com">
-                <xs:element name="sample" type="xs:string" />
-                <xs:element name="sampleOne" type="xs:string" />
-            </xs:schema>
-            """.trimIndent()
             XmlIncludeFlattener(includingFile).process().trimIndent() shouldBe expectedText
         }
 
@@ -59,13 +59,6 @@ class XmlIncludeFlattenerTest : FunSpec({
             """.trimIndent()
             includedFile.writeText(includedFileText)
 
-            @Language("XML") val expectedText = """
-            <?xml version="1.0" encoding="UTF-8"?>
-            <xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema" targetNamespace="http://www.sample.com">
-                <xs:element name="sample" type="xs:string" />
-                <xs:element name="sampleOne" type="xs:string" />
-            </xs:schema>
-            """.trimIndent()
             XmlIncludeFlattener(includingFile).process().trimIndent() shouldBe expectedText
         }
     }
