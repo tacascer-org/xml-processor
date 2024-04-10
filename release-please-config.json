@@ -7,7 +7,7 @@
       "bump-minor-pre-major": false,
       "bump-patch-for-minor-pre-major": false,
       "draft": false,
-      "prerelease": true,
+      "prerelease": false,
       "extra-files": [
         "build.gradle.kts"
       ]
