@@ -1,9 +1,12 @@
+import com.vanniktech.maven.publish.SonatypeHost
+
 plugins {
     `java-library`
     id("com.adarshr.test-logger") version "4.0.0"
+    id("com.vanniktech.maven.publish") version "0.28.0"
+    id("org.jetbrains.dokka") version "1.9.20"
     id("org.jetbrains.kotlinx.kover") version "0.7.6"
     id("org.sonarqube") version "5.0.0.4638"
-    id("org.jetbrains.dokka") version "1.9.20"
     kotlin("jvm") version "1.9.23"
 }
 
@@ -62,5 +65,34 @@ sonar {
             "sonar.coverage.jacoco.xmlReportPaths",
             "${layout.buildDirectory.asFile.get()}/reports/kover/report.xml"
         )
+    }
+}
+
+mavenPublishing {
+    publishToMavenCentral(SonatypeHost.CENTRAL_PORTAL)
+    signAllPublications()
+    coordinates("$group", name, "$version")
+    pom {
+        name.set("XML Processor")
+        description.set("A simple tool to flatten XML files by inlining included schemas.")
+        url.set("https://github.com/tacascer-org/xml-processor")
+        licenses {
+            license {
+                name = "GPL-3.0"
+                url = "https://www.gnu.org/licenses/gpl-3.0.html"
+            }
+        }
+        developers {
+            developer {
+                id = "tacascer"
+                name = "Tim Tran"
+                url = "https://github.com/tacascer"
+            }
+        }
+        scm {
+            url = "https://github.com/tacascer-org/xml-processor"
+            connection = "scm:git:git://github.com/tacascer-org/xml-processor.git"
+            developerConnection = "scm:git:ssh://git@github.com:tacascer-org/xml-processor.git"
+        }
     }
 }
