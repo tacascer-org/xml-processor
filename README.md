@@ -40,7 +40,7 @@ Consider the following XML files:
 `sampleDir/sample_1.xsd`
 ```xml
 <?xml version="1.0" encoding="UTF-8"?>
-<xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema" targetNamespace="http://www.sample.com">
+<xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema">
     <xs:element name="sample_1" type="xs:string"/>
 </xs:schema>
 ```
