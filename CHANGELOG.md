@@ -1,5 +1,12 @@
 # Changelog
 
+## [0.2.1](https://github.com/tacascer-org/xml-processor/compare/v0.2.0...v0.2.1) (2024-04-11)
+
+
+### Bug Fixes
+
+* remove jdom references from API ([#25](https://github.com/tacascer-org/xml-processor/issues/25)) ([8c1886c](https://github.com/tacascer-org/xml-processor/commit/8c1886c4c3c0fb88c222dee8621c99dbabe5474e))
+
 ## [0.2.0](https://github.com/tacascer-org/xml-processor/compare/v0.1.0...v0.2.0) (2024-04-11)
 
 
