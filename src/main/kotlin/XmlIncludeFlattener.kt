@@ -7,6 +7,7 @@ import org.jdom2.filter.Filters
 import org.jdom2.input.SAXBuilder
 import org.jdom2.output.Format
 import org.jdom2.output.XMLOutputter
+import java.io.FileWriter
 import java.io.StringWriter
 import java.net.URI
 import java.nio.file.Path
@@ -41,6 +42,16 @@ class XmlIncludeFlattener(private val input: Path, format: Format = Format.getPr
             outputter.output(output, it)
             it.toString()
         }
+    }
+
+    /**
+     * Processes the XML file and writes the flattened content to the specified output path.
+     * @param outputPath the path to the output file
+     * @throws Exception if an error occurs during processing
+     */
+    fun process(outputPath: Path) {
+        val output = process(inputDocument)
+        return FileWriter(outputPath.toFile()).use { outputter.output(output, it) }
     }
 
     private fun process(inputDocument: Document): Document {
