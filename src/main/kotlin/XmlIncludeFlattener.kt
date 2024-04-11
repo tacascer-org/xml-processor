@@ -19,15 +19,14 @@ private val logger = KotlinLogging.logger {}
 /**
  * Flattens an XML file by inlining all the schemas specified in `include` elements.
  * @param input the path to the XML file to process
- * @param format the format to use for the output
  *
  * **Note:** The included schemas must be specified using the `include` element with the `schemaLocation` attribute.
  * The `schemaLocation` attribute must contain a valid URI to the included schema.
  *
  * @see [XML Inclusions](https://www.w3schools.com/xml/el_include.asp)
  */
-class XmlIncludeFlattener(private val input: Path, format: Format = Format.getPrettyFormat().setIndent(" ".repeat(4))) {
-    private val outputter = XMLOutputter(format)
+class XmlIncludeFlattener(private val input: Path) {
+    private val outputter = XMLOutputter(Format.getPrettyFormat().setIndent(" ".repeat(4)))
     private val saxBuilder = SAXBuilder()
     private val inputDocument = saxBuilder.build(input.inputStream())
 

@@ -25,9 +25,9 @@ val slf4jSimpleVersion = "2.0.3"
 val kotlinLoggingVersion = "5.1.0"
 
 dependencies {
-    api("org.jdom:jdom2:$jdomVersion")
     compileOnly("org.jetbrains:annotations:$jetbrainsAnnotationVersion")
     implementation("io.github.oshai:kotlin-logging-jvm:$kotlinLoggingVersion")
+    implementation("org.jdom:jdom2:$jdomVersion")
     runtimeOnly("jaxen:jaxen:$jaxenVersion")
     testImplementation("io.kotest:kotest-runner-junit5-jvm:$kotestVersion")
     testImplementation(kotlin("test"))
