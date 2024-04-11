@@ -1,5 +1,12 @@
 # Changelog
 
+## [0.2.0](https://github.com/tacascer-org/xml-processor/compare/v0.1.0...v0.2.0) (2024-04-11)
+
+
+### Features
+
+* output to given file ([#24](https://github.com/tacascer-org/xml-processor/issues/24)) ([6659539](https://github.com/tacascer-org/xml-processor/commit/66595391441fcfe27c8cb9f9fbde003ce2ae5705))
+
 ## [0.2.0-rc.1](https://github.com/tacascer-org/xml-processor/compare/v0.1.1-rc.1...v0.2.0-rc.1) (2024-04-10)
 
 
