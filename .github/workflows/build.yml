@@ -12,7 +12,7 @@ on:
 
 jobs:
   submit-dependencies:
-    uses: tacascer-org/actions-workflows/.github/workflows/submit_dependencies.yml@v0.1.0
+    uses: tacascer-org/actions-workflows/.github/workflows/submit_dependencies.yml@v0.1.1
     permissions:
       contents: write
 
@@ -20,7 +20,7 @@ jobs:
     strategy:
       matrix:
         os: [ ubuntu-latest, windows-latest ]
-    uses: tacascer-org/actions-workflows/.github/workflows/gradle_build.yml@v0.1.0
+    uses: tacascer-org/actions-workflows/.github/workflows/gradle_build.yml@v0.1.1
     with:
       java-version: 17
       runs-on: ${{ matrix.os }}
