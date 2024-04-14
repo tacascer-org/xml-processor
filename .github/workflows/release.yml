@@ -13,7 +13,7 @@ jobs:
         with:
           distribution: temurin
           java-version: 17
-      - name: Setup Gradle
+      - name: Build
         uses: gradle/gradle-build-action@v3
       - name: Publish
         env:
