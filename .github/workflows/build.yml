@@ -13,8 +13,8 @@ on:
 jobs:
   submit-dependencies:
     uses: tacascer-org/actions-workflows/.github/workflows/submit_dependencies.yml@0.1.0
-  permissions:
-    contents: write
+    permissions:
+      contents: write
 
   gradle:
     matrix: # Run the job on different operating systems
