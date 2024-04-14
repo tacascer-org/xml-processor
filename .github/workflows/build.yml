@@ -9,9 +9,6 @@ name: Build And Analyze
 
 on:
   push:
-    branches: [ "main" ]
-  pull_request:
-    types: [ opened, synchronize, reopened ]
 
 permissions:
   contents: write
@@ -31,8 +28,6 @@ jobs:
           build-scan-publish: true
           build-scan-terms-of-use-url: "https://gradle.com/help/legal-terms-of-use"
           build-scan-terms-of-use-agree: "yes"
-      - name: Perform dependency review
-        uses: actions/dependency-review-action@v3
 
   gradle:
     strategy:
