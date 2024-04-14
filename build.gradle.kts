@@ -49,6 +49,13 @@ tasks.sonar {
     dependsOn(tasks.named("koverXmlReport"))
 }
 
+develocity {
+    buildScan {
+        termsOfUseUrl.set("https://gradle.com/help/legal-terms-of-use")
+        termsOfUseAgree.set("yes")
+    }
+}
+
 sonar {
     properties {
         property("sonar.projectKey", "tacascer-org_xml-processor")
