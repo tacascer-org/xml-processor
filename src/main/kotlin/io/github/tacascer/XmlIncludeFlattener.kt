@@ -1,6 +1,7 @@
 package io.github.tacascer
 
 import io.github.oshai.kotlinlogging.KotlinLogging
+import io.github.tacascer.namespace.NamespaceStrategies
 import org.jdom2.Document
 import org.jdom2.Element
 import org.jdom2.filter.Filters
@@ -19,16 +20,19 @@ private val logger = KotlinLogging.logger {}
 /**
  * Flattens an XML file by inlining all the schemas specified in `include` elements.
  * @param input the path to the XML file to process
+ * @param stripNamespace whether to strip the namespace from the elements
  *
  * **Note:** The included schemas must be specified using the `include` element with the `schemaLocation` attribute.
  * The `schemaLocation` attribute must contain a valid URI to the included schema.
  *
  * @see [XML Inclusions](https://www.w3schools.com/xml/el_include.asp)
  */
-class XmlIncludeFlattener(private val input: Path) {
+class XmlIncludeFlattener(private val input: Path, stripNamespace: Boolean = false) {
     private val outputter = XMLOutputter(Format.getPrettyFormat().setIndent(" ".repeat(4)))
     private val saxBuilder = SAXBuilder()
     private val inputDocument = saxBuilder.build(input.inputStream())
+    private val namespaceStrategy =
+        if (stripNamespace) NamespaceStrategies.StripNamespace else NamespaceStrategies.KeepNamespace
 
     /**
      * Processes the XML file and returns the flattened content.
@@ -64,6 +68,7 @@ class XmlIncludeFlattener(private val input: Path) {
                     includedDocument.rootElement.getDescendants(Filters.element()).map(Element::clone)
                 )
             }
+        output.processNamespaces()
         return output
     }
 
@@ -78,5 +83,10 @@ class XmlIncludeFlattener(private val input: Path) {
         val inlinedDocument = process(this)
         val output = inlinedDocument.clone()
         return output
+    }
+
+    private fun Document.processNamespaces() {
+        namespaceStrategy.process(rootElement)
+        rootElement.getDescendants(Filters.element()).map { namespaceStrategy.process(it) }
     }
 }
