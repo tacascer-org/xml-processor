@@ -1,5 +1,12 @@
 # Changelog
 
+## [0.3.0](https://github.com/tacascer-org/xml-processor/compare/v0.2.1...v0.3.0) (2024-04-15)
+
+
+### Features
+
+* can strip namespace ([#32](https://github.com/tacascer-org/xml-processor/issues/32)) ([872c674](https://github.com/tacascer-org/xml-processor/commit/872c674dcb14f8297de03d426cdb118b23ee12c1))
+
 ## [0.2.1](https://github.com/tacascer-org/xml-processor/compare/v0.2.0...v0.2.1) (2024-04-11)
 
 
