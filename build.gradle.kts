@@ -22,7 +22,7 @@ val jdomVersion = "2.0.6.1"
 val jetbrainsAnnotationVersion = "24.1.0"
 val jaxenVersion = "2.0.0"
 val slf4jSimpleVersion = "2.0.3"
-val kotlinLoggingVersion = "5.1.0"
+val kotlinLoggingVersion = "6.0.9"
 
 dependencies {
     compileOnly("org.jetbrains:annotations:$jetbrainsAnnotationVersion")
