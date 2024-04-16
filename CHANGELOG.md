@@ -1,5 +1,12 @@
 # Changelog
 
+## [0.4.0](https://github.com/tacascer-org/xml-processor/compare/v0.3.0...v0.4.0) (2024-04-16)
+
+
+### Features
+
+* add classpath parsing ([#40](https://github.com/tacascer-org/xml-processor/issues/40)) ([3653001](https://github.com/tacascer-org/xml-processor/commit/3653001c1d97d31b0c9b4dc7f48125577404bdda))
+
 ## [0.3.0](https://github.com/tacascer-org/xml-processor/compare/v0.2.1...v0.3.0) (2024-04-15)
 
 
