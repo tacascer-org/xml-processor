@@ -1,5 +1,6 @@
 package io.github.tacascer
 
+import io.kotest.assertions.throwables.shouldThrow
 import io.kotest.core.spec.style.FunSpec
 import io.kotest.engine.spec.tempdir
 import io.kotest.engine.spec.tempfile
@@ -116,6 +117,13 @@ class XmlIncludeFlattenerTest : FunSpec({
     }
 
     context("classpath includes") {
+        test("given one xsd that includes another xsd that doesn't exist on the classpath, then should throw IllegalArgumentException") {
+            val includingFile = this::class.java.classLoader.getResource("sample_invalid_include.xsd")!!.toURI().toPath()
+
+            shouldThrow<IllegalArgumentException> {
+                XmlIncludeFlattener(includingFile).process()
+            }
+        }
         test("given one xsd that includes another xsd through classpath, then should return a single xsd with all elements") {
             val includingFile = this::class.java.classLoader.getResource("sample.xsd")!!.toURI().toPath()
 
