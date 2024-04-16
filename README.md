@@ -28,6 +28,8 @@ val flattener = XmlIncludeFlattener(xmlFile)
 val result = flattener.process()
 ```
 
+Consult the JavaDoc for more information on the `XMLIncludeFlattener` APIs.
+
 In this example, `result` will be a `String` that contains the XML content of the processed file with all included files
 inlined.
 
@@ -54,7 +56,7 @@ Consider the following XML files:
 </xs:schema>
 ```
 
-If you use `XMLIncludeFlattener` to process `sample.xsd`, the result will be:
+When processed, the result will be:
 
 ```xml
 <?xml version="1.0" encoding="UTF-8"?>
@@ -97,7 +99,7 @@ Consider the following XML files:
 </xs:schema>
 ```
 
-If you use `XMLIncludeFlattener` to process `sample.xsd`, the result will be:
+When processed, the result will be:
 
 ```xml
 <?xml version="1.0" encoding="UTF-8"?>
@@ -106,10 +108,6 @@ If you use `XMLIncludeFlattener` to process `sample.xsd`, the result will be:
     <xs:element name="sample_1" type="xs:string"/>
 </xs:schema>
 ```
-
-As you can see, even though `sample_1.xsd` was in a different namespace (`http://www.different.com`), after processing,
-the `sample_1` element is in the same namespace as the input file (`http://www.sample.com`). This is because
-the `XMLIncludeFlattener` brings all included elements into the namespace of the input file.
 
 ### Stripping Away All Namespaces
 
@@ -166,3 +164,24 @@ If you use `XMLIncludeFlattener` with `stripNamespace` set to `true` to process 
 
 **WARNING:** Stripping away all namespaces might make the final document invalid if the original XML files were
 using namespaces to differentiate between elements or attributes with the same name but different meanings.
+
+## Classpath Parsing
+
+The `XMLIncludeFlattener` class in the `xml-processor` project supports classpath parsing. This feature allows you to
+include XML files that are located in the classpath of your application.
+
+### Usage
+
+To include an XML file from the classpath, you need to use the `classpath:` prefix in the `schemaLocation` attribute of
+the `xs:include` tag. Here is an example:
+
+```xml
+
+<xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema" targetNamespace="http://www.sample.com">
+    <xs:include schemaLocation="classpath:sample_1.xsd"/>
+    <xs:element name="sample" type="xs:string"/>
+</xs:schema>
+```
+
+In this example, `sample_1.xsd` is located in the classpath of the application. The `XMLIncludeFlattener` class will
+correctly resolve this path and include the content of `sample_1.xsd` in the processed XML file.
