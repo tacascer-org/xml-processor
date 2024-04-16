@@ -17,6 +17,8 @@ import kotlin.io.path.toPath
 
 private val logger = KotlinLogging.logger {}
 
+private const val CLASSPATH_PREFIX = "classpath:"
+
 /**
  * Flattens an XML file by inlining all the schemas specified in `include` elements.
  * @param input the path to the XML file to process
@@ -75,8 +77,12 @@ class XmlIncludeFlattener(private val input: Path, stripNamespace: Boolean = fal
     private fun Element.toDocument(): Document {
         val includedSchema = getAttributeValue("schemaLocation")
         logger.info { "Processing included schema: $includedSchema" }
-        val includedDocument = saxBuilder.build(URI(includedSchema).toPath().inputStream())
-        return includedDocument
+        val schemaURI =
+            if (includedSchema.startsWith(CLASSPATH_PREFIX)) {
+                this::class.java.classLoader.getResource(includedSchema.removePrefix(CLASSPATH_PREFIX))?.toURI()
+                    ?: throw IllegalArgumentException("Included schema not found: $includedSchema")
+            } else URI(includedSchema)
+        return saxBuilder.build(schemaURI.toPath().inputStream())
     }
 
     private fun Document.inline(): Document {

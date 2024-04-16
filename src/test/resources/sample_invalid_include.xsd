@@ -1,0 +1,4 @@
+<schema xmlns="http://www.w3.org/2001/XMLSchema">
+    <include schemaLocation="classpath:non_existent_file.xsd"/>
+    <element name="sample" type="string"/>
+</schema>

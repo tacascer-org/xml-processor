@@ -1,12 +1,13 @@
 package io.github.tacascer
 
-import io.github.tacascer.namespace.NamespaceStrategies
+import io.kotest.assertions.throwables.shouldThrow
 import io.kotest.core.spec.style.FunSpec
 import io.kotest.engine.spec.tempdir
 import io.kotest.engine.spec.tempfile
 import io.kotest.matchers.shouldBe
 import org.intellij.lang.annotations.Language
 import kotlin.io.path.createFile
+import kotlin.io.path.toPath
 import kotlin.io.path.writeText
 
 class XmlIncludeFlattenerTest : FunSpec({
@@ -112,6 +113,30 @@ class XmlIncludeFlattenerTest : FunSpec({
                 """.trimIndent()
                 XmlIncludeFlattener(includingFile, stripNamespace = true).process().trimIndent() shouldBe expectedText
             }
+        }
+    }
+
+    context("classpath includes") {
+        test("given one xsd that includes another xsd that doesn't exist on the classpath, then should throw IllegalArgumentException") {
+            val includingFile = this::class.java.classLoader.getResource("sample_invalid_include.xsd")!!.toURI().toPath()
+
+            shouldThrow<IllegalArgumentException> {
+                XmlIncludeFlattener(includingFile).process()
+            }
+        }
+        test("given one xsd that includes another xsd through classpath, then should return a single xsd with all elements") {
+            val includingFile = this::class.java.classLoader.getResource("sample.xsd")!!.toURI().toPath()
+
+            @Language("XML")
+            val expectedText = """
+            <?xml version="1.0" encoding="UTF-8"?>
+            <schema xmlns="http://www.w3.org/2001/XMLSchema">
+                <element name="sample" type="string" />
+                <element name="sampleOne" type="string" />
+            </schema>
+            """.trimIndent()
+
+            XmlIncludeFlattener(includingFile).process().trimIndent() shouldBe expectedText
         }
     }
 
