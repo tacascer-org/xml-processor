@@ -21,11 +21,10 @@ private const val CLASSPATH_PREFIX = "classpath:"
 
 /**
  * Flattens an XML file by inlining all the schemas specified in `include` elements.
- * @param input the path to the XML file to process
- * @param stripNamespace whether to strip the namespace from the elements
  *
  * **Note:** The included schemas must be specified using the `include` element with the `schemaLocation` attribute.
- * The `schemaLocation` attribute must contain a valid URI to the included schema.
+ *
+ * @param stripNamespace whether to strip the namespace from the elements
  *
  * @see [XML Inclusions](https://www.w3schools.com/xml/el_include.asp)
  */
@@ -35,8 +34,15 @@ class XmlIncludeFlattener(stripNamespace: Boolean = false) : XmlFilter {
     private val namespaceStrategy =
         if (stripNamespace) NamespaceStrategies.StripNamespace else NamespaceStrategies.KeepNamespace
 
+    /**
+     * Flattens the XML content by inlining all the schemas specified in `include` elements.
+     */
     override fun apply(input: String): String {
-        TODO("Not yet implemented")
+        val output = process(saxBuilder.build(input.byteInputStream()))
+        return StringWriter().use {
+            XMLOutputter(Format.getCompactFormat()).output(output, it)
+            it.toString()
+        }
     }
 
     /**

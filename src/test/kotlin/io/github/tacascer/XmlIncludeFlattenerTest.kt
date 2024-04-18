@@ -15,8 +15,6 @@ class XmlIncludeFlattenerTest : FunSpec({
         val testDir = tempdir()
         val includingFile = testDir.toPath().resolve("sample.xsd").createFile()
         val includedFile = testDir.toPath().resolve("sample_1.xsd").createFile()
-
-
         context("given one xsd that includes another xsd through URI") {
             @Language("XML") val includingFileText = """
             <?xml version="1.0" encoding="UTF-8"?>
@@ -49,6 +47,13 @@ class XmlIncludeFlattenerTest : FunSpec({
                 val outputFile = tempfile("output", ".xsd")
                 XmlIncludeFlattener().process(includingFile, outputFile.toPath())
                 outputFile.readText().trimIndent() shouldBe expectedText
+            }
+
+            test("apply(String) should return a compacted xsd with all elements") {
+                XmlIncludeFlattener().apply(includingFileText).trimIndent() shouldBe """
+                    <?xml version="1.0" encoding="UTF-8"?>
+                    <xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema" targetNamespace="http://www.sample.com"><xs:element name="sample" type="xs:string" /><xs:element name="sampleOne" type="xs:string" /></xs:schema>
+                """.trimIndent()
             }
 
         }
@@ -118,7 +123,8 @@ class XmlIncludeFlattenerTest : FunSpec({
 
     context("classpath includes") {
         test("given one xsd that includes another xsd that doesn't exist on the classpath, then should throw IllegalArgumentException") {
-            val includingFile = this::class.java.classLoader.getResource("sample_invalid_include.xsd")!!.toURI().toPath()
+            val includingFile =
+                this::class.java.classLoader.getResource("sample_invalid_include.xsd")!!.toURI().toPath()
 
             shouldThrow<IllegalArgumentException> {
                 XmlIncludeFlattener().process(includingFile)
