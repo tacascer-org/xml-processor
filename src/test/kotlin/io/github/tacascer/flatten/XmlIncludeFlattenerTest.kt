@@ -92,37 +92,6 @@ class XmlIncludeFlattenerTest : FunSpec({
                 XmlIncludeFlattener().process(includingFile).trimIndent() shouldBe expectedText
             }
         }
-
-        context("given xsds whose elements have different prefixes") {
-            @Language("XML") val includingFileText = """
-                <?xml version="1.0" encoding="UTF-8"?>
-                <xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema" targetNamespace="http://www.sample.com">
-                    <xs:include schemaLocation="${testDir.toPath().resolve("sample_1.xsd").toUri()}"/>
-                    <xs:element name="sample" type="xs:string"/>
-                </xs:schema>
-                """.trimIndent()
-            includingFile.writeText(
-                includingFileText
-            )
-            @Language("XML") val includedFileText = """
-                <?xml version="1.0" encoding="UTF-8"?>
-                <schema xmlns:xsd="http://www.w3.org/2001/XMLSchema" targetNamespace="http://www.sample.com">
-                    <xsd:element xsd:name="sampleOne" type="xsd:string"/>
-                </schema>
-                """.trimIndent()
-            includedFile.writeText(includedFileText)
-
-            test("given stripNamespace is true, should return a single xsd with all elements whose namespaces are stripped") {
-                @Language("XML") val expectedText = """
-                <?xml version="1.0" encoding="UTF-8"?>
-                <schema targetNamespace="http://www.sample.com">
-                    <element name="sample" type="string" />
-                    <element name="sampleOne" type="string" />
-                </schema>
-                """.trimIndent()
-                XmlIncludeFlattener(stripNamespace = true).process(includingFile).trimIndent() shouldBe expectedText
-            }
-        }
     }
 
     context("classpath includes") {

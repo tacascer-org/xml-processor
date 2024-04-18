@@ -1,13 +1,12 @@
 package io.github.tacascer.flatten
 
 import io.github.oshai.kotlinlogging.KotlinLogging
+import io.github.tacascer.Formatters
 import io.github.tacascer.XmlFilter
-import io.github.tacascer.namespace.NamespaceStrategies
 import org.jdom2.Document
 import org.jdom2.Element
 import org.jdom2.filter.Filters
 import org.jdom2.input.SAXBuilder
-import org.jdom2.output.Format
 import org.jdom2.output.XMLOutputter
 import java.io.FileWriter
 import java.io.StringWriter
@@ -25,15 +24,10 @@ private const val CLASSPATH_PREFIX = "classpath:"
  *
  * **Note:** The included schemas must be specified using the `include` element with the `schemaLocation` attribute.
  *
- * @param stripNamespace whether to strip the namespace from the elements
- *
  * @see [XML Inclusions](https://www.w3schools.com/xml/el_include.asp)
  */
-class XmlIncludeFlattener(stripNamespace: Boolean = false) : XmlFilter {
-    private val outputter = XMLOutputter(Format.getPrettyFormat().setIndent(" ".repeat(4)))
+class XmlIncludeFlattener() : XmlFilter {
     private val saxBuilder = SAXBuilder()
-    private val namespaceStrategy =
-        if (stripNamespace) NamespaceStrategies.StripNamespace else NamespaceStrategies.KeepNamespace
 
     /**
      * Flattens the XML content by inlining all the schemas specified in `include` elements.
@@ -41,7 +35,7 @@ class XmlIncludeFlattener(stripNamespace: Boolean = false) : XmlFilter {
     override fun apply(input: String): String {
         val output = process(saxBuilder.build(input.byteInputStream()))
         return StringWriter().use {
-            XMLOutputter(Format.getCompactFormat()).output(output, it)
+            XMLOutputter(Formatters.COMPACT).output(output, it)
             it.toString()
         }
     }
@@ -52,10 +46,10 @@ class XmlIncludeFlattener(stripNamespace: Boolean = false) : XmlFilter {
      * @return the flattened XML content
      * @throws Exception if an error occurs during processing
      */
-    fun process(input: Path): String {
+    override fun process(input: Path): String {
         val output = process(input.toDocument())
         return StringWriter().use {
-            outputter.output(output, it)
+            XMLOutputter(Formatters.PRETTY).output(output, it)
             it.toString()
         }
     }
@@ -63,12 +57,13 @@ class XmlIncludeFlattener(stripNamespace: Boolean = false) : XmlFilter {
     /**
      * Processes the XML file and writes the flattened content to the specified output path.
      * @param input the path to the XML file to process
-     * @param outputPath the path to the output file
+     * @param output the path to the output file
      * @throws Exception if an error occurs during processing
      */
-    fun process(input: Path, outputPath: Path) {
-        val output = process(input.toDocument())
-        return FileWriter(outputPath.toFile()).use { outputter.output(output, it) }
+    override fun process(input: Path, output: Path) {
+        return FileWriter(output.toFile()).use {
+            XMLOutputter(Formatters.PRETTY).output(process(input.toDocument()), it)
+        }
     }
 
     private fun process(inputDocument: Document): Document {
@@ -82,7 +77,6 @@ class XmlIncludeFlattener(stripNamespace: Boolean = false) : XmlFilter {
                     includedDocument.rootElement.getDescendants(Filters.element()).map(Element::clone)
                 )
             }
-        output.processNamespaces()
         return output
     }
 
@@ -103,10 +97,5 @@ class XmlIncludeFlattener(stripNamespace: Boolean = false) : XmlFilter {
         val inlinedDocument = process(this)
         val output = inlinedDocument.clone()
         return output
-    }
-
-    private fun Document.processNamespaces() {
-        namespaceStrategy.process(rootElement)
-        rootElement.getDescendants(Filters.element()).map { namespaceStrategy.process(it) }
     }
 }
