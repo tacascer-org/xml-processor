@@ -29,20 +29,24 @@ private const val CLASSPATH_PREFIX = "classpath:"
  *
  * @see [XML Inclusions](https://www.w3schools.com/xml/el_include.asp)
  */
-class XmlIncludeFlattener(private val input: Path, stripNamespace: Boolean = false) {
+class XmlIncludeFlattener(stripNamespace: Boolean = false) : XmlFilter {
     private val outputter = XMLOutputter(Format.getPrettyFormat().setIndent(" ".repeat(4)))
     private val saxBuilder = SAXBuilder()
-    private val inputDocument = saxBuilder.build(input.inputStream())
     private val namespaceStrategy =
         if (stripNamespace) NamespaceStrategies.StripNamespace else NamespaceStrategies.KeepNamespace
 
+    override fun apply(input: String): String {
+        TODO("Not yet implemented")
+    }
+
     /**
      * Processes the XML file and returns the flattened content.
+     * @param input the path to the XML file to process
      * @return the flattened XML content
      * @throws Exception if an error occurs during processing
      */
-    fun process(): String {
-        val output = process(inputDocument)
+    fun process(input: Path): String {
+        val output = process(input.toDocument())
         return StringWriter().use {
             outputter.output(output, it)
             it.toString()
@@ -51,11 +55,12 @@ class XmlIncludeFlattener(private val input: Path, stripNamespace: Boolean = fal
 
     /**
      * Processes the XML file and writes the flattened content to the specified output path.
+     * @param input the path to the XML file to process
      * @param outputPath the path to the output file
      * @throws Exception if an error occurs during processing
      */
-    fun process(outputPath: Path) {
-        val output = process(inputDocument)
+    fun process(input: Path, outputPath: Path) {
+        val output = process(input.toDocument())
         return FileWriter(outputPath.toFile()).use { outputter.output(output, it) }
     }
 
@@ -82,8 +87,10 @@ class XmlIncludeFlattener(private val input: Path, stripNamespace: Boolean = fal
                 this::class.java.classLoader.getResource(includedSchema.removePrefix(CLASSPATH_PREFIX))?.toURI()
                     ?: throw IllegalArgumentException("Included schema not found: $includedSchema")
             } else URI(includedSchema)
-        return saxBuilder.build(schemaURI.toPath().inputStream())
+        return schemaURI.toPath().toDocument()
     }
+
+    private fun Path.toDocument(): Document = saxBuilder.build(inputStream())
 
     private fun Document.inline(): Document {
         val inlinedDocument = process(this)
