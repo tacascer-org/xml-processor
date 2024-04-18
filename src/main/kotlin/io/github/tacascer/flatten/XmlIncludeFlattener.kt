@@ -1,6 +1,7 @@
-package io.github.tacascer
+package io.github.tacascer.flatten
 
 import io.github.oshai.kotlinlogging.KotlinLogging
+import io.github.tacascer.XmlFilter
 import io.github.tacascer.namespace.NamespaceStrategies
 import org.jdom2.Document
 import org.jdom2.Element

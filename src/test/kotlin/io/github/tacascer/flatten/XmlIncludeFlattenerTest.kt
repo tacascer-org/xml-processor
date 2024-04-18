@@ -1,4 +1,4 @@
-package io.github.tacascer
+package io.github.tacascer.flatten
 
 import io.kotest.assertions.throwables.shouldThrow
 import io.kotest.core.spec.style.FunSpec
@@ -31,31 +31,35 @@ class XmlIncludeFlattenerTest : FunSpec({
             </xs:schema>
             """.trimIndent()
             includedFile.writeText(includedFileText)
-            @Language("XML") val expectedText = """
-            <?xml version="1.0" encoding="UTF-8"?>
-            <xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema" targetNamespace="http://www.sample.com">
-                <xs:element name="sample" type="xs:string" />
-                <xs:element name="sampleOne" type="xs:string" />
-            </xs:schema>
-            """.trimIndent()
 
-            test("should return a single xsd with all elements") {
-                XmlIncludeFlattener().process(includingFile).trimIndent() shouldBe expectedText
+            context("fully formatted xsd result") {
+                @Language("XML") val expectedText = """
+                <?xml version="1.0" encoding="UTF-8"?>
+                <xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema" targetNamespace="http://www.sample.com">
+                    <xs:element name="sample" type="xs:string" />
+                    <xs:element name="sampleOne" type="xs:string" />
+                </xs:schema>
+                """.trimIndent()
+                test("should return a single xsd with all elements") {
+                    XmlIncludeFlattener().process(includingFile).trimIndent() shouldBe expectedText
+                }
+                test("process(Path) should write out a single xsd with all elements") {
+                    val outputFile = tempfile("output", ".xsd")
+                    XmlIncludeFlattener().process(includingFile, outputFile.toPath())
+                    outputFile.readText().trimIndent() shouldBe expectedText
+                }
             }
 
-            test("process(Path) should write out a single xsd with all elements") {
-                val outputFile = tempfile("output", ".xsd")
-                XmlIncludeFlattener().process(includingFile, outputFile.toPath())
-                outputFile.readText().trimIndent() shouldBe expectedText
-            }
-
-            test("apply(String) should return a compacted xsd with all elements") {
-                XmlIncludeFlattener().apply(includingFileText).trimIndent() shouldBe """
+            context("compacted xsd result") {
+                test("apply(String) should return a compacted xsd with all elements") {
+                    @Language("XML")
+                    val expectedText = """
                     <?xml version="1.0" encoding="UTF-8"?>
                     <xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema" targetNamespace="http://www.sample.com"><xs:element name="sample" type="xs:string" /><xs:element name="sampleOne" type="xs:string" /></xs:schema>
-                """.trimIndent()
+                """
+                    XmlIncludeFlattener().apply(includingFileText).trimIndent() shouldBe expectedText.trimIndent()
+                }
             }
-
         }
 
         context("given xsds that have different namespaces") {
