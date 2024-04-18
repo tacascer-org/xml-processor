@@ -15,9 +15,18 @@ import kotlin.io.path.inputStream
 
 private val logger = KotlinLogging.logger {}
 
+/**
+ * Removes all namespaces from an XML file. This includes defined namespaces and namespace prefixes in attributes.
+ */
 class NamespaceRemover : XmlFilter {
     private val saxBuilder = SAXBuilder()
 
+    /**
+     * Removes all namespaces from the XML content.
+     *
+     * @param input the XML content to process
+     * @return the XML content with all namespaces removed
+     */
     override fun apply(input: String): String {
         val output = process(saxBuilder.build(input.byteInputStream()))
         return StringWriter().use {
@@ -26,6 +35,12 @@ class NamespaceRemover : XmlFilter {
         }
     }
 
+    /**
+     * Processes the XML file and returns the content with all namespaces removed.
+     *
+     * @param input the path to the XML file to process
+     * @return the XML content with all namespaces removed
+     */
     override fun process(input: Path): String {
         val output = process(input.toDocument())
         return StringWriter().use {
@@ -34,6 +49,12 @@ class NamespaceRemover : XmlFilter {
         }
     }
 
+    /**
+     * Processes the XML file and writes the content with all namespaces removed to the specified output path.
+     *
+     * @param input the path to the XML file to process
+     * @param output the path to the output file
+     */
     override fun process(input: Path, output: Path) {
         val outputDocument = process(input.toDocument())
         output.toFile().bufferedWriter().use {

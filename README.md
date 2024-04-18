@@ -9,7 +9,7 @@
 
 A set of utilities to process XML files.
 
-## Flatten `xs:include`
+## Flatten `include`
 
 The `XMLIncludeFlattener` is a utility class in the `xml-processor` project. It is designed to recursively process XML
 files that include other XML files using the `xs:include` tag. The class reads an XML file and inlines all the included
@@ -109,74 +109,17 @@ When processed, the result will be:
 </xs:schema>
 ```
 
-### Stripping Away All Namespaces
+### Classpath Parsing
 
-If you want the final XML content to have all namespaces stripped away, you can use the `stripNamespace` parameter of
-the
-`XMLIncludeFlattener` class. When set to `true`, this parameter will remove all namespace prefixes from the final XML.
+This feature allows you to include XML files that are located in the classpath of your application.
 
 #### Usage
-
-To use this feature, you need to pass `true` to the `stripNamespace` parameter when creating an instance
-of `XMLIncludeFlattener`. Here is an example:
-
-```kotlin
-val xmlFile = Paths.get("path/to/your/xml/file.xml")
-val flattener = XmlIncludeFlattener(xmlFile, stripNamespace = true)
-val result = flattener.process()
-```
-
-In this example, `result` will be a `String` that contains the XML content of the processed file with all included files
-inlined and all namespaces stripped away.
-
-#### Example
-
-Consider the following XML files:
-
-`sampleDir/sample.xsd`
-
-```xml
-<?xml version="1.0" encoding="UTF-8"?>
-<xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema" targetNamespace="http://www.sample.com">
-    <xs:include schemaLocation="sample_1.xsd"/>
-    <xs:element name="sample" type="xs:string"/>
-</xs:schema>
-```
-
-`sampleDir/sample_1.xsd`
-
-```xml
-<?xml version="1.0" encoding="UTF-8"?>
-<xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema" targetNamespace="http://www.different.com">
-    <xs:element name="sample_1" type="xs:string"/>
-</xs:schema>
-```
-
-If you use `XMLIncludeFlattener` with `stripNamespace` set to `true` to process `sample.xsd`, the result will be:
-
-```xml
-<?xml version="1.0" encoding="UTF-8"?>
-<schema targetNamespace="http://www.sample.com">
-    <element name="sample" type="string"/>
-    <element name="sample_1" type="string"/>
-</schema>
-```
-
-**WARNING:** Stripping away all namespaces might make the final document invalid if the original XML files were
-using namespaces to differentiate between elements or attributes with the same name but different meanings.
-
-## Classpath Parsing
-
-The `XMLIncludeFlattener` class in the `xml-processor` project supports classpath parsing. This feature allows you to
-include XML files that are located in the classpath of your application.
-
-### Usage
 
 To include an XML file from the classpath, you need to use the `classpath:` prefix in the `schemaLocation` attribute of
 the `xs:include` tag. Here is an example:
 
 ```xml
-
+<?xml version="1.0" encoding="UTF-8"?>
 <xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema" targetNamespace="http://www.sample.com">
     <xs:include schemaLocation="classpath:sample_1.xsd"/>
     <xs:element name="sample" type="xs:string"/>
@@ -185,3 +128,47 @@ the `xs:include` tag. Here is an example:
 
 In this example, `sample_1.xsd` is located in the classpath of the application. The `XMLIncludeFlattener` class will
 correctly resolve this path and include the content of `sample_1.xsd` in the processed XML file.
+
+## Namespace Remover
+
+The `NamespaceRemover` class is designed to remove all namespaces from an XML document. This includes defined namespaces
+and namespace prefixes in attributes.
+
+### Usage
+
+To use the `NamespaceRemover`, you need to create an instance of the class and call the appropriate method based on your
+needs. Here are some basic examples:
+
+#### Removing Namespaces from a String
+
+```kotlin
+val namespaceRemover = NamespaceRemover()
+val xmlString = "<root xmlns=\"http://www.example.com\"><child>text</child></root>"
+val result = namespaceRemover.apply(xmlString)
+```
+
+In this example, `result` will be a `String` that contains the XML content of the processed string with all namespaces
+removed.
+
+#### Removing Namespaces from a File
+
+```kotlin
+val namespaceRemover = NamespaceRemover()
+val xmlFile = Paths.get("path/to/your/xml/file.xml")
+val result = namespaceRemover.process(xmlFile)
+```
+
+In this example, `result` will be a `String` that contains the XML content of the processed file with all namespaces
+removed.
+
+#### Removing Namespaces from a File and Writing to Another File
+
+```kotlin
+val namespaceRemover = NamespaceRemover()
+val inputFile = Paths.get("path/to/your/input/xml/file.xml")
+val outputFile = Paths.get("path/to/your/output/xml/file.xml")
+namespaceRemover.process(inputFile, outputFile)
+```
+
+In this example, the input file will be processed and the result (with all namespaces removed) will be written to the
+output file.
