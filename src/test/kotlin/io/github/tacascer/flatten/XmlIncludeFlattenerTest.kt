@@ -41,11 +41,11 @@ class XmlIncludeFlattenerTest : FunSpec({
                 </xs:schema>
                 """.trimIndent()
                 test("should return a single xsd with all elements") {
-                    XmlIncludeFlattener().process(includingFile).trimIndent() shouldBe expectedText
+                    XmlIncludeFilter().process(includingFile).trimIndent() shouldBe expectedText
                 }
                 test("process(Path) should write out a single xsd with all elements") {
                     val outputFile = tempfile("output", ".xsd")
-                    XmlIncludeFlattener().process(includingFile, outputFile.toPath())
+                    XmlIncludeFilter().process(includingFile, outputFile.toPath())
                     outputFile.readText().trimIndent() shouldBe expectedText
                 }
             }
@@ -57,7 +57,7 @@ class XmlIncludeFlattenerTest : FunSpec({
                     <?xml version="1.0" encoding="UTF-8"?>
                     <xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema" targetNamespace="http://www.sample.com"><xs:element name="sample" type="xs:string" /><xs:element name="sampleOne" type="xs:string" /></xs:schema>
                 """
-                    XmlIncludeFlattener().apply(includingFileText).trimIndent() shouldBe expectedText.trimIndent()
+                    XmlIncludeFilter().apply(includingFileText).trimIndent() shouldBe expectedText.trimIndent()
                 }
             }
         }
@@ -89,7 +89,7 @@ class XmlIncludeFlattenerTest : FunSpec({
             """.trimIndent()
 
             test("should return a single xsd with all elements whose targetNamespace is the input xsd") {
-                XmlIncludeFlattener().process(includingFile).trimIndent() shouldBe expectedText
+                XmlIncludeFilter().process(includingFile).trimIndent() shouldBe expectedText
             }
         }
     }
@@ -100,7 +100,7 @@ class XmlIncludeFlattenerTest : FunSpec({
                 this::class.java.classLoader.getResource("sample_invalid_include.xsd")!!.toURI().toPath()
 
             shouldThrow<IllegalArgumentException> {
-                XmlIncludeFlattener().process(includingFile)
+                XmlIncludeFilter().process(includingFile)
             }
         }
         test("given one xsd that includes another xsd through classpath, then should return a single xsd with all elements") {
@@ -115,7 +115,7 @@ class XmlIncludeFlattenerTest : FunSpec({
             </schema>
             """.trimIndent()
 
-            XmlIncludeFlattener().process(includingFile).trimIndent() shouldBe expectedText
+            XmlIncludeFilter().process(includingFile).trimIndent() shouldBe expectedText
         }
     }
 
@@ -158,6 +158,6 @@ class XmlIncludeFlattenerTest : FunSpec({
             <xs:element name="sampleTwo" type="xs:string" />
         </xs:schema>
         """.trimIndent()
-        XmlIncludeFlattener().process(includingFile).trimIndent() shouldBe expectedText
+        XmlIncludeFilter().process(includingFile).trimIndent() shouldBe expectedText
     }
 })
