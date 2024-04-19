@@ -1,5 +1,13 @@
 # Changelog
 
+## [0.5.0](https://github.com/tacascer-org/xml-processor/compare/v0.4.0...v0.5.0) (2024-04-19)
+
+
+### Features
+
+* add filter chaining ([#44](https://github.com/tacascer-org/xml-processor/issues/44)) ([45e64fa](https://github.com/tacascer-org/xml-processor/commit/45e64fa4594774a4725dea4c1c9590ddf51c65bf))
+* namespace remover ([#42](https://github.com/tacascer-org/xml-processor/issues/42)) ([3907330](https://github.com/tacascer-org/xml-processor/commit/3907330626fbb7de1d8688d427c615c307bb8bf9))
+
 ## [0.4.0](https://github.com/tacascer-org/xml-processor/compare/v0.3.0...v0.4.0) (2024-04-16)
 
 
