@@ -1,9 +1,8 @@
 package io.github.tacascer
 
-import java.nio.file.Files
 import java.nio.file.Path
-import java.nio.file.StandardCopyOption
 import kotlin.io.path.readText
+import kotlin.io.path.writeText
 
 /**
  * Represents a chain of [XmlFilter] instances. Is itself a [XmlFilter].
@@ -54,6 +53,6 @@ class XmlFilterChain(private val filters: List<XmlFilter>) : XmlFilter {
      */
     override fun process(input: Path, output: Path) {
         val content = process(input)
-        Files.copy(content.byteInputStream(), output, StandardCopyOption.REPLACE_EXISTING)
+        output.writeText(content)
     }
 }
