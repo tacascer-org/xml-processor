@@ -17,7 +17,7 @@ It inlines all the included files into the main XML file, regardless of their or
 ### Usage
 
 To use the `XmlIncludeFlattener`, you need to create an instance of the class and use one of the APIs according to your
-needs. Here is a basic examples:
+needs. Here is a basic example:
 
 #### Flattening Includes from a String
 
