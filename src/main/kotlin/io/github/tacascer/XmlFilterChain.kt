@@ -55,4 +55,8 @@ class XmlFilterChain(private val filters: List<XmlFilter>) : XmlFilter {
         val content = process(input)
         output.writeText(content)
     }
+
+    override fun toString(): String {
+        return "XmlFilterChain(filters=$filters)"
+    }
 }

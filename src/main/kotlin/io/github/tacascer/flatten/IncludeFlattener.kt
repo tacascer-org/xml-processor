@@ -52,4 +52,8 @@ class IncludeFlattener() : AbstractXmlFilter() {
         val output = inlinedDocument.clone()
         return output
     }
+
+    override fun toString(): String {
+        return "IncludeFlattener()"
+    }
 }
