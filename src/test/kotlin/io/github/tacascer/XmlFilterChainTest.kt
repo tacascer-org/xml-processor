@@ -34,7 +34,7 @@ class XmlFilterChainTest : FunSpec({
         }
     }
 
-    val filterChain = XmlFilterChain(filterOne, filterTwo)
+    val filterChain = XmlFilterChain(listOf(filterOne, filterTwo))
 
     test("apply converts 'a' to 'b' and 'b' to 'c'") {
         filterChain.apply("abc") shouldBe "ccc"
