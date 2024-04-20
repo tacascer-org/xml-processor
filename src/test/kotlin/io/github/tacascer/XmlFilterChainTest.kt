@@ -56,4 +56,10 @@ class XmlFilterChainTest : FunSpec({
 
         outputFile.readText() shouldBe "ccc"
     }
+
+    context("non functional tests") {
+        test("toString() works") {
+            filterChain.toString() shouldBe "XmlFilterChain(filters=[$filterOne, $filterTwo])"
+        }
+    }
 })

@@ -160,4 +160,10 @@ class IncludeFlattenerTest : FunSpec({
         """.trimIndent()
         IncludeFlattener().process(includingFile).trimIndent() shouldBe expectedText
     }
+
+    context("non functional tests") {
+        test("toString() should return IncludeFlattener()") {
+            IncludeFlattener().toString() shouldBe "IncludeFlattener()"
+        }
+    }
 })
