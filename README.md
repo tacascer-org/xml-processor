@@ -177,7 +177,7 @@ import io.github.tacascer.XmlFilterChain
 import io.github.tacascer.flatten.IncludeFlattener
 import io.github.tacascer.namespace.NamespaceRemover
 
-val filterChain = XmlFilterChain(IncludeFlattener(), NamespaceRemover())
+val filterChain = XmlFilterChain(listOf(IncludeFlattener(), NamespaceRemover()))
 val xmlString = """
     <xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema" targetNamespace="http://www.sample.com">
         <xs:include schemaLocation="sample_1.xsd"/>
