@@ -11,18 +11,18 @@ A set of utilities to process XML files.
 
 ## Flatten `include`
 
-The `XmlIncludeFlattener` class is designed to handle XML files that include other XML files from different namespaces.
+The `IncludeFlattener` class is designed to handle XML files that include other XML files from different namespaces.
 It inlines all the included files into the main XML file, regardless of their original namespaces.
 
 ### Usage
 
-To use the `XmlIncludeFlattener`, you need to create an instance of the class and use one of the APIs according to your
+To use the `IncludeFlattener`, you need to create an instance of the class and use one of the APIs according to your
 needs. Here is a basic example:
 
 #### Flattening Includes from a String
 
 ```kotlin
-val flattener = XmlIncludeFlattener()
+val flattener = IncludeFlattener()
 val xmlString = """
     <root xmlns:xs="http://www.w3.org/2001/XMLSchema" targetNamespace="http://www.sample.com">
         <xs:include schemaLocation="sample_1.xsd"/>
@@ -36,7 +36,7 @@ In this example, `result` will be a `String` that contains the XML content of th
 files inlined. The `sample_1.xsd` file should be in the same directory as your running application.
 
 The input XML string includes another XML file `sample_1.xsd` which is located in the same directory as your running
-application. The `XmlIncludeFlattener` will inline the content of `sample_1.xsd` into the main XML string.
+application. The `IncludeFlattener` will inline the content of `sample_1.xsd` into the main XML string.
 
 Assuming `sample_1.xsd` contains:
 
@@ -111,7 +111,7 @@ the `xs:include` tag. Here is an example:
 </xs:schema>
 ```
 
-In this example, `sample_1.xsd` is located in the classpath of the application. The `XMLIncludeFlattener` class will
+In this example, `sample_1.xsd` is located in the classpath of the application. The `IncludeFlattener` class will
 correctly resolve this path and include the content of `sample_1.xsd` in the processed XML file.
 
 ## Remove Namespaces
@@ -170,14 +170,14 @@ appropriate method based on your needs.
 
 #### Applying a Chain of Filters to a String
 
-Here's an example of how to use `XmlFilterChain` with `XmlIncludeFlattener` and `NamespaceRemover` filters:
+Here's an example of how to use `XmlFilterChain` with `IncludeFlattener` and `NamespaceRemover` filters:
 
 ```kotlin
 import io.github.tacascer.XmlFilterChain
-import io.github.tacascer.flatten.XmlIncludeFlattener
+import io.github.tacascer.flatten.IncludeFlattener
 import io.github.tacascer.namespace.NamespaceRemover
 
-val filterChain = XmlFilterChain(XmlIncludeFlattener(), NamespaceRemover())
+val filterChain = XmlFilterChain(listOf(IncludeFlattener(), NamespaceRemover()))
 val xmlString = """
     <xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema" targetNamespace="http://www.sample.com">
         <xs:include schemaLocation="sample_1.xsd"/>

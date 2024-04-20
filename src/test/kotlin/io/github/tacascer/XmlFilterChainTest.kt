@@ -34,7 +34,7 @@ class XmlFilterChainTest : FunSpec({
         }
     }
 
-    val filterChain = XmlFilterChain(filterOne, filterTwo)
+    val filterChain = XmlFilterChain(listOf(filterOne, filterTwo))
 
     test("apply converts 'a' to 'b' and 'b' to 'c'") {
         filterChain.apply("abc") shouldBe "ccc"
@@ -55,5 +55,11 @@ class XmlFilterChainTest : FunSpec({
         filterChain.process(inputFile.toPath(), outputFile.toPath())
 
         outputFile.readText() shouldBe "ccc"
+    }
+
+    context("non functional tests") {
+        test("toString() works") {
+            filterChain.toString() shouldBe "XmlFilterChain(filters=[$filterOne, $filterTwo])"
+        }
     }
 })

@@ -20,7 +20,7 @@ private const val CLASSPATH_PREFIX = "classpath:"
  *
  * @see [XML Inclusions](https://www.w3schools.com/xml/el_include.asp)
  */
-class XmlIncludeFlattener() : AbstractXmlFilter() {
+class IncludeFlattener() : AbstractXmlFilter() {
 
     override fun process(input: Document): Document {
         val output = input.clone()
@@ -51,5 +51,9 @@ class XmlIncludeFlattener() : AbstractXmlFilter() {
         val inlinedDocument = process(this)
         val output = inlinedDocument.clone()
         return output
+    }
+
+    override fun toString(): String {
+        return "IncludeFlattener()"
     }
 }

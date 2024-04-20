@@ -13,13 +13,6 @@ import kotlin.io.path.writeText
 class XmlFilterChain(private val filters: List<XmlFilter>) : XmlFilter {
 
     /**
-     * Secondary constructor that accepts a variable number of [XmlFilter] instances.
-     *
-     * @param filters The [XmlFilter] instances that make up the chain.
-     */
-    constructor(vararg filters: XmlFilter) : this(filters.toList())
-
-    /**
      * Applies all the filters in the chain to the input string.
      * The filters are applied in the order they are added to the chain.
      *
@@ -54,5 +47,9 @@ class XmlFilterChain(private val filters: List<XmlFilter>) : XmlFilter {
     override fun process(input: Path, output: Path) {
         val content = process(input)
         output.writeText(content)
+    }
+
+    override fun toString(): String {
+        return "XmlFilterChain(filters=$filters)"
     }
 }

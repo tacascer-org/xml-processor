@@ -37,4 +37,8 @@ class NamespaceRemover : AbstractXmlFilter() {
             }
         }
     }
+
+    override fun toString(): String {
+        return "NamespaceRemover()"
+    }
 }
