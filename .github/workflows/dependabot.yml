@@ -6,7 +6,7 @@ on: pull_request
 
 jobs:
   dependabot:
-    uses: tacascer-org/actions-workflows/.github/workflows/approve_dependabot.yml@v0.2.0
+    uses: tacascer-org/actions-workflows/.github/workflows/approve_dependabot.yml@v0.2.2
     permissions:
       pull-requests: write
       contents: write
