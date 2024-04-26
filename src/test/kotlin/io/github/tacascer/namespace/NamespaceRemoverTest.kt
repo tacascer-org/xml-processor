@@ -10,17 +10,37 @@ import kotlin.io.path.writeText
 class NamespaceRemoverTest : FunSpec({
     context("given an XML with namespaces") {
         @Language("XML") val input = """
-            <xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema" targetNamespace="http://www.sample.com">
-                <xs:element name="sample" type="xs:string"/>
+            <?xml version="1.0" encoding="UTF-8"?>
+            <xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns:tns="http://www.sample.com" xmlns:jaxb='http://java.sun.com/xml/ns/jaxb' targetNamespace="http://www.sample.com">
+                <xs:complexType name="complex">
+                    <xs:sequence>
+                        <xs:element name="simple" type="xs:string" />
+                    </xs:sequence>
+                </xs:complexType>
+                <xs:element name="sample" type="xs:string" />
+                <xs:element name="complex" type="tns:complex"/>
+                <jaxb:bindings>
+                    <jaxb:globalBindings>
+                    </jaxb:globalBindings>
+                </jaxb:bindings>
             </xs:schema>
-        """.trimIndent()
+            """.trimIndent()
 
         context("fully formatted XML result") {
             @Language("XML") val expected = """
                 <?xml version="1.0" encoding="UTF-8"?>
-                <schema targetNamespace="http://www.sample.com">
-                    <element name="sample" type="string" />
-                </schema>
+                <xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema" targetNamespace="http://www.sample.com">
+                    <xs:complexType name="complex">
+                        <xs:sequence>
+                            <xs:element name="simple" type="xs:string" />
+                        </xs:sequence>
+                    </xs:complexType>
+                    <xs:element name="sample" type="xs:string" />
+                    <xs:element name="complex" type="complex" />
+                    <bindings>
+                        <globalBindings />
+                    </bindings>
+                </xs:schema>
                 
             """.trimIndent()
 
@@ -36,19 +56,19 @@ class NamespaceRemoverTest : FunSpec({
 
                 NamespaceRemover().process(inputPath, outputPath)
 
-                outputPath.readText().replace("\r\n", "\n") shouldBe expected
+                outputPath.readText().lines().joinToString("\n") shouldBe expected
             }
         }
 
         context("compacted XML result") {
             @Language("XML") val expected = """
                 <?xml version="1.0" encoding="UTF-8"?>
-                <schema targetNamespace="http://www.sample.com"><element name="sample" type="string" /></schema>
+                <xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema" targetNamespace="http://www.sample.com"><xs:complexType name="complex"><xs:sequence><xs:element name="simple" type="xs:string" /></xs:sequence></xs:complexType><xs:element name="sample" type="xs:string" /><xs:element name="complex" type="complex" /><bindings><globalBindings /></bindings></xs:schema>
                 
             """.trimIndent()
 
             test("apply(String) should remove all namespaces") {
-                NamespaceRemover().apply(input).replace("\r\n", "\n") shouldBe expected
+                NamespaceRemover().apply(input).lines().joinToString("\n") shouldBe expected
             }
         }
     }
