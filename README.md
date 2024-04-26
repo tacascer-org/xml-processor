@@ -122,41 +122,43 @@ and namespace prefixes in attributes.
 ### Usage
 
 To use the `NamespaceRemover`, you need to create an instance of the class and call the appropriate method based on your
-needs. Here are some basic examples:
-
-#### Removing Namespaces from a String
+needs. Here is an example:
 
 ```kotlin
-val namespaceRemover = NamespaceRemover()
-val xmlString = "<root xmlns=\"http://www.example.com\"><child>text</child></root>"
-val result = namespaceRemover.apply(xmlString)
+val remover = NamespaceRemover()
+val xmlString = """
+    <xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns:tns="http://www.sample.com" targetNamespace="http://www.sample.com">
+        <xs:complexType name="complex">
+            <xs:sequence>
+                <xs:element name="simple" type="xs:string"/>
+            </xs:sequence>
+        </xs:complexType>
+        <xs:element name="sample" type="xs:string"/>
+        <xs:element name="complex" type="tns:complex"/>
+    </xs:schema>
+""".trimIndent()
+val result = remover.apply(xmlString)
+
+assert(
+    result == """
+                <?xml version="1.0" encoding="UTF-8"?>
+                <xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema" targetNamespace="http://www.sample.com">
+                    <xs:complexType name="complex">
+                        <xs:sequence>
+                            <xs:element name="simple" type="xs:string" />
+                        </xs:sequence>
+                    </xs:complexType>
+                    <xs:element name="sample" type="xs:string" />
+                    <xs:element name="complex" type="complex" />
+                </xs:schema>
+            """
+)
 ```
 
-In this example, `result` will be a `String` that contains the XML content of the processed string with all namespaces
-removed.
+Notice that the `tns` namespace prefix has been removed from the `complex` element type.
 
-#### Removing Namespaces from a File
-
-```kotlin
-val namespaceRemover = NamespaceRemover()
-val xmlFile = Paths.get("path/to/your/xml/file.xml")
-val result = namespaceRemover.process(xmlFile)
-```
-
-In this example, `result` will be a `String` that contains the XML content of the processed file with all namespaces
-removed.
-
-#### Removing Namespaces from a File and Writing to Another File
-
-```kotlin
-val namespaceRemover = NamespaceRemover()
-val inputFile = Paths.get("path/to/your/input/xml/file.xml")
-val outputFile = Paths.get("path/to/your/output/xml/file.xml")
-namespaceRemover.process(inputFile, outputFile)
-```
-
-In this example, the input file will be processed and the result (with all namespaces removed) will be written to the
-output file.
+**NOTE** The `NamespaceRemover` class does not remove the `xs` namespace prefix because it is a conventional namespace
+prefix for XML Schema.
 
 ## Chaining Xml Filters
 
@@ -203,10 +205,10 @@ The expected output will be:
 
 ```xml
 <?xml version="1.0" encoding="UTF-8" ?>
-<schema targetNamespace="http://www.sample.com">
-    <element name="sample" type="string"/>
-    <element name="sample_1" type="string"/>
-</schema>
+<xs:schema targetNamespace="http://www.sample.com">
+    <xs:element name="sample" type="string"/>
+    <xs:element name="sample_1" type="string"/>
+</xs:schema>
 ```
 
 In the output, you can see that the `sample_1` element from the included file `sample_1.xsd` has been inlined into the

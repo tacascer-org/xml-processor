@@ -11,6 +11,8 @@ private val logger = KotlinLogging.logger {}
 
 /**
  * Removes all namespaces from an XML file. This includes defined namespaces and namespace prefixes in attributes.
+ *
+ * **Note:** This filter does **NOT** remove the `xs` namespace prefix.
  */
 class NamespaceRemover : AbstractXmlFilter() {
     /**
@@ -26,19 +28,19 @@ class NamespaceRemover : AbstractXmlFilter() {
 
     private fun process(element: Element) {
         logger.info { "Stripping namespace from element: $element" }
-        val namespaces = element.additionalNamespaces.toList()
-        namespaces.forEach { element.removeNamespaceDeclaration(it) }
-        element.namespace = Namespace.NO_NAMESPACE
+        val namespaces = element.additionalNamespaces
+        namespaces.filterNot { it.prefix == "xs" }.forEach { element.removeNamespaceDeclaration(it) }
+        if (element.namespacePrefix != "xs") {
+            element.namespace = Namespace.NO_NAMESPACE
+        }
         element.attributes.forEach {
             logger.info { "Stripping namespace from attribute: $it" }
             it.namespace = Namespace.NO_NAMESPACE
-            if (it.name == "type") {
-                it.value = it.value.replaceBefore(":", "").removePrefix(":")
+            if (it.name == "type" && !it.value.startsWith("xs:")) {
+                it.value = it.value.substringAfter(":")
             }
         }
     }
 
-    override fun toString(): String {
-        return "NamespaceRemover()"
-    }
+    override fun toString(): String = "NamespaceRemover()"
 }
