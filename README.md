@@ -196,8 +196,13 @@ Assuming `sample_1.xsd` contains:
 
 ```xml
 <?xml version="1.0" encoding="UTF-8"?>
-<xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema" targetNamespace="http://www.different.com">
-    <xs:element name="sample_1" type="xs:string"/>
+<xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns:tns="http://www.different.com" targetNamespace="http://www.different.com">
+    <xs:complexType name="complex">
+        <xs:sequence>
+            <xs:element name="simple" type="xs:string"/>
+        </xs:sequence>
+    </xs:complexType>
+    <xs:element name="complex" type="tns:complex"/>
 </xs:schema>
 ```
 
@@ -205,9 +210,14 @@ The expected output will be:
 
 ```xml
 <?xml version="1.0" encoding="UTF-8" ?>
-<xs:schema targetNamespace="http://www.sample.com">
-    <xs:element name="sample" type="string"/>
-    <xs:element name="sample_1" type="string"/>
+<xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema" targetNamespace="http://www.sample.com">
+    <xs:complexType name="complex">
+        <xs:sequence>
+            <xs:element name="simple" type="xs:string"/>
+        </xs:sequence>
+    </xs:complexType>
+    <xs:element name="complex" type="complex"/>
+    <xs:element name="sample" type="xs:string"/>
 </xs:schema>
 ```
 
