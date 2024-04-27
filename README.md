@@ -124,35 +124,34 @@ and namespace prefixes in attributes.
 To use the `NamespaceRemover`, you need to create an instance of the class and call the appropriate method based on your
 needs. Here is an example:
 
-```kotlin
-val remover = NamespaceRemover()
-val xmlString = """
-    <xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns:tns="http://www.sample.com" targetNamespace="http://www.sample.com">
-        <xs:complexType name="complex">
-            <xs:sequence>
-                <xs:element name="simple" type="xs:string"/>
-            </xs:sequence>
-        </xs:complexType>
-        <xs:element name="sample" type="xs:string"/>
-        <xs:element name="complex" type="tns:complex"/>
-    </xs:schema>
-""".trimIndent()
-val result = remover.apply(xmlString)
+Assume the input file is
 
-assert(
-    result == """
-                <?xml version="1.0" encoding="UTF-8"?>
-                <xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema" targetNamespace="http://www.sample.com">
-                    <xs:complexType name="complex">
-                        <xs:sequence>
-                            <xs:element name="simple" type="xs:string" />
-                        </xs:sequence>
-                    </xs:complexType>
-                    <xs:element name="sample" type="xs:string" />
-                    <xs:element name="complex" type="complex" />
-                </xs:schema>
-            """
-)
+```xml
+<xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns:tns="http://www.sample.com"
+           targetNamespace="http://www.sample.com">
+    <xs:complexType name="complex">
+        <xs:sequence>
+            <xs:element name="simple" type="xs:string"/>
+        </xs:sequence>
+    </xs:complexType>
+    <xs:element name="sample" type="xs:string"/>
+    <xs:element name="complex" type="tns:complex"/>
+</xs:schema>
+```
+
+When processed, the result will be:
+
+```xml
+<?xml version="1.0" encoding="UTF-8"?>
+<xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema" targetNamespace="http://www.sample.com">
+    <xs:complexType name="complex">
+        <xs:sequence>
+            <xs:element name="simple" type="xs:string"/>
+        </xs:sequence>
+    </xs:complexType>
+    <xs:element name="sample" type="xs:string"/>
+    <xs:element name="complex" type="complex"/>
+</xs:schema>
 ```
 
 Notice that the `tns` namespace prefix has been removed from the `complex` element type.
@@ -196,7 +195,8 @@ Assuming `sample_1.xsd` contains:
 
 ```xml
 <?xml version="1.0" encoding="UTF-8"?>
-<xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns:tns="http://www.different.com" targetNamespace="http://www.different.com">
+<xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns:tns="http://www.different.com"
+           targetNamespace="http://www.different.com">
     <xs:complexType name="complex">
         <xs:sequence>
             <xs:element name="simple" type="xs:string"/>
