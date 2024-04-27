@@ -1,5 +1,13 @@
 # Changelog
 
+## [0.6.0](https://github.com/tacascer-org/xml-processor/compare/v0.5.0...v0.6.0) (2024-04-27)
+
+
+### Features
+
+* follow API guidelines ([#46](https://github.com/tacascer-org/xml-processor/issues/46)) ([3d20150](https://github.com/tacascer-org/xml-processor/commit/3d201507411247f4fed3652078421c9bf6a0adeb))
+* NamespaceRemover ignore `xs:` ([#50](https://github.com/tacascer-org/xml-processor/issues/50)) ([f6df429](https://github.com/tacascer-org/xml-processor/commit/f6df4295aefc7f7ff85841661d87db51607bc4d3))
+
 ## [0.5.0](https://github.com/tacascer-org/xml-processor/compare/v0.4.0...v0.5.0) (2024-04-19)
 
 
