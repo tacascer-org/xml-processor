@@ -8,4 +8,4 @@ permissions:
 
 jobs:
   dependency-review:
-    uses: tacascer-org/actions-workflows/.github/workflows/review_dependencies.yml@v0.2.2
+    uses: tacascer-org/actions-workflows/.github/workflows/review_dependencies.yml@v0.2.3
