@@ -1,0 +1,4 @@
+<xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema">
+    <xs:include schemaLocation="classpath:io/github/tacascer/flatten/include/sample_1.xsd"/>
+    <xs:element name="sample" type="xs:string"/>
+</xs:schema>

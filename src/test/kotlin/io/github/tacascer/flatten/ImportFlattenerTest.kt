@@ -10,27 +10,27 @@ import kotlin.io.path.createFile
 import kotlin.io.path.toPath
 import kotlin.io.path.writeText
 
-class IncludeFlattenerTest : FunSpec({
+class ImportFlattenerTest : FunSpec({
     context("given two xsd files") {
         val testDir = tempdir()
-        val includingFile = testDir.toPath().resolve("sample.xsd").createFile()
-        val includedFile = testDir.toPath().resolve("sample_1.xsd").createFile()
-        context("given one xsd that includes another xsd through URI") {
-            @Language("XML") val includingFileText = """
+        val importingFile = testDir.toPath().resolve("sample.xsd").createFile()
+        val importedFile = testDir.toPath().resolve("sample_1.xsd").createFile()
+        context("given one xsd that imports another xsd through URI") {
+            @Language("XML") val importingFileText = """
             <?xml version="1.0" encoding="UTF-8"?>
             <xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema" targetNamespace="http://www.sample.com">
-                <xs:include schemaLocation="${testDir.toPath().resolve("sample_1.xsd").toUri()}"/>
+                <xs:import schemaLocation="${testDir.toPath().resolve("sample_1.xsd").toUri()}"/>
                 <xs:element name="sample" type="xs:string"/>
             </xs:schema>
             """.trimIndent()
-            includingFile.writeText(includingFileText)
-            @Language("XML") val includedFileText = """
+            importingFile.writeText(importingFileText)
+            @Language("XML") val importedFileText = """
             <?xml version="1.0" encoding="UTF-8"?>
             <xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema">
                 <xs:element name="sampleOne" type="xs:string"/>
             </xs:schema>
             """.trimIndent()
-            includedFile.writeText(includedFileText)
+            importedFile.writeText(importedFileText)
 
             context("fully formatted xsd result") {
                 @Language("XML") val expectedText = """
@@ -41,11 +41,11 @@ class IncludeFlattenerTest : FunSpec({
                 </xs:schema>
                 """.trimIndent()
                 test("should return a single xsd with all elements") {
-                    IncludeFlattener().process(includingFile).trimIndent() shouldBe expectedText
+                    ImportFlattener().process(importingFile).trimIndent() shouldBe expectedText
                 }
                 test("process(Path) should write out a single xsd with all elements") {
                     val outputFile = tempfile("output", ".xsd")
-                    IncludeFlattener().process(includingFile, outputFile.toPath())
+                    ImportFlattener().process(importingFile, outputFile.toPath())
                     outputFile.readText().trimIndent() shouldBe expectedText
                 }
             }
@@ -57,29 +57,29 @@ class IncludeFlattenerTest : FunSpec({
                     <?xml version="1.0" encoding="UTF-8"?>
                     <xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema" targetNamespace="http://www.sample.com"><xs:element name="sample" type="xs:string" /><xs:element name="sampleOne" type="xs:string" /></xs:schema>
                 """
-                    IncludeFlattener().apply(includingFileText).trimIndent() shouldBe expectedText.trimIndent()
+                    ImportFlattener().apply(importingFileText).trimIndent() shouldBe expectedText.trimIndent()
                 }
             }
         }
 
         context("given xsds that have different namespaces") {
-            @Language("XML") val includingFileText = """
+            @Language("XML") val importingFileText = """
                 <?xml version="1.0" encoding="UTF-8"?>
                 <xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema" targetNamespace="http://www.sample.com">
-                    <xs:include schemaLocation="${testDir.toPath().resolve("sample_1.xsd").toUri()}"/>
+                    <xs:import schemaLocation="${testDir.toPath().resolve("sample_1.xsd").toUri()}"/>
                     <xs:element name="sample" type="xs:string"/>
                 </xs:schema>
                 """.trimIndent()
-            includingFile.writeText(
-                includingFileText
+            importingFile.writeText(
+                importingFileText
             )
-            @Language("XML") val includedFileText = """
+            @Language("XML") val importedFileText = """
                 <?xml version="1.0" encoding="UTF-8"?>
                 <xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema" targetNamespace="http://www.sample1.com">
                     <xs:element name="sampleOne" type="xs:string"/>
                 </xs:schema>
                 """.trimIndent()
-            includedFile.writeText(includedFileText)
+            importedFile.writeText(importedFileText)
             @Language("XML") val expectedText = """
             <?xml version="1.0" encoding="UTF-8"?>
             <xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema" targetNamespace="http://www.sample.com">
@@ -89,22 +89,22 @@ class IncludeFlattenerTest : FunSpec({
             """.trimIndent()
 
             test("should return a single xsd with all elements whose targetNamespace is the input xsd") {
-                IncludeFlattener().process(includingFile).trimIndent() shouldBe expectedText
+                ImportFlattener().process(importingFile).trimIndent() shouldBe expectedText
             }
         }
     }
 
     context("classpath includes") {
         test("given one xsd that includes another xsd that doesn't exist on the classpath, then should throw IllegalArgumentException") {
-            val includingFile =
-                this::class.java.classLoader.getResource("io/github/tacascer/flatten/include/sample_invalid_include.xsd")!!.toURI().toPath()
+            val importingFile =
+                this::class.java.classLoader.getResource("io/github/tacascer/flatten/import/sample_invalid_import.xsd")!!.toURI().toPath()
 
             shouldThrow<IllegalArgumentException> {
-                IncludeFlattener().process(includingFile)
+                ImportFlattener().process(importingFile)
             }
         }
         test("given one xsd that includes another xsd through classpath, then should return a single xsd with all elements") {
-            val includingFile = this::class.java.classLoader.getResource("io/github/tacascer/flatten/include/sample.xsd")!!.toURI().toPath()
+            val importingFile = this::class.java.classLoader.getResource("io/github/tacascer/flatten/import/sample.xsd")!!.toURI().toPath()
 
             @Language("XML")
             val expectedText = """
@@ -115,40 +115,40 @@ class IncludeFlattenerTest : FunSpec({
             </xs:schema>
             """.trimIndent()
 
-            IncludeFlattener().process(includingFile).trimIndent() shouldBe expectedText
+            ImportFlattener().process(importingFile).trimIndent() shouldBe expectedText
         }
     }
 
     test("given one xsd that includes another xsd that includes another, then should return a single xsd with all elements") {
         val testDir = tempdir()
-        val includingFile = testDir.toPath().resolve("sample.xsd").createFile()
-        val includedFile = testDir.toPath().resolve("sample_1.xsd").createFile()
-        val includedFile2 = testDir.toPath().resolve("sample_2.xsd").createFile()
-        @Language("XML") val includingFileText = """
+        val importingFile = testDir.toPath().resolve("sample.xsd").createFile()
+        val importedFile = testDir.toPath().resolve("sample_1.xsd").createFile()
+        val importedFile2 = testDir.toPath().resolve("sample_2.xsd").createFile()
+        @Language("XML") val importingFileText = """
         <?xml version="1.0" encoding="UTF-8"?>
         <xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema" targetNamespace="http://www.sample.com">
-            <xs:include schemaLocation="${testDir.toPath().resolve("sample_1.xsd").toUri()}"/>
+            <xs:import schemaLocation="${testDir.toPath().resolve("sample_1.xsd").toUri()}"/>
             <xs:element name="sample" type="xs:string"/>
         </xs:schema>
         """.trimIndent()
-        includingFile.writeText(
-            includingFileText
+        importingFile.writeText(
+            importingFileText
         )
-        @Language("XML") val includedFileText = """
+        @Language("XML") val importedFileText = """
         <?xml version="1.0" encoding="UTF-8"?>
         <xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema">
-            <xs:include schemaLocation="${testDir.toPath().resolve("sample_2.xsd").toUri()}"/>
+            <xs:import schemaLocation="${testDir.toPath().resolve("sample_2.xsd").toUri()}"/>
             <xs:element name="sampleOne" type="xs:string"/>
         </xs:schema>
         """.trimIndent()
-        includedFile.writeText(includedFileText)
-        @Language("XML") val includedFile2Text = """
+        importedFile.writeText(importedFileText)
+        @Language("XML") val importedFile2Text = """
         <?xml version="1.0" encoding="UTF-8"?>
         <xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema">
             <xs:element name="sampleTwo" type="xs:string"/>
         </xs:schema>
         """.trimIndent()
-        includedFile2.writeText(includedFile2Text)
+        importedFile2.writeText(importedFile2Text)
 
         @Language("XML") val expectedText = """
         <?xml version="1.0" encoding="UTF-8"?>
@@ -158,12 +158,12 @@ class IncludeFlattenerTest : FunSpec({
             <xs:element name="sampleTwo" type="xs:string" />
         </xs:schema>
         """.trimIndent()
-        IncludeFlattener().process(includingFile).trimIndent() shouldBe expectedText
+        ImportFlattener().process(importingFile).trimIndent() shouldBe expectedText
     }
 
     context("non functional tests") {
-        test("toString() should return IncludeFlattener()") {
-            IncludeFlattener().toString() shouldBe "IncludeFlattener()"
+        test("toString() should return ImportFlattener()") {
+            ImportFlattener().toString() shouldBe "ImportFlattener()"
         }
     }
 })
