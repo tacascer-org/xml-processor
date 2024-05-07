@@ -8,7 +8,7 @@ import kotlin.io.path.writeText
  * Represents a chain of [XmlFilter] instances. Is itself a [XmlFilter].
  * It applies the filters in the order they are added to the chain.
  *
- * @property filters The list of [XmlFilter] instances that make up the chain.
+ * @constructor Creates an instance of XmlFilterChain with the given list of [filters].
  */
 class XmlFilterChain(private val filters: List<XmlFilter>) : XmlFilter {
 
