@@ -10,7 +10,7 @@ import org.jdom2.filter.Filters
  *
  * **Note:** The included schemas must be specified using the `include` element with the `schemaLocation` attribute.
  *
- * @see [XML Inclusions](https://www.w3schools.com/xml/el_include.asp)
+ * [XML Inclusions](https://www.w3schools.com/xml/el_include.asp)
  */
 class IncludeFlattener() : AbstractXmlFilter() {
 

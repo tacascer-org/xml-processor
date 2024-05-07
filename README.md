@@ -21,14 +21,18 @@ needs. Here is a basic example:
 
 #### Flattening Includes from a String
 
+Given the following XML string:
+
+```xml
+
+<xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema" targetNamespace="http://www.sample.com">
+    <xs:include schemaLocation="sample_1.xsd"/>
+    <xs:element name="sample" type="xs:string"/>
+</xs:schema>
+```
+
 ```kotlin
 val flattener = IncludeFlattener()
-val xmlString = """
-    <root xmlns:xs="http://www.w3.org/2001/XMLSchema" targetNamespace="http://www.sample.com">
-        <xs:include schemaLocation="sample_1.xsd"/>
-        <xs:element name="sample" type="xs:string"/>
-    </root>
-"""
 val result = flattener.apply(xmlString)
 ```
 
@@ -51,10 +55,10 @@ The expected output will be:
 
 ```xml
 
-<root xmlns:xs="http://www.w3.org/2001/XMLSchema" targetNamespace="http://www.sample.com">
+<xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema" targetNamespace="http://www.sample.com">
     <xs:element name="sample" type="xs:string"/>
     <xs:element name="sample_1" type="xs:string"/>
-</root>
+</xs:schema>
 ```
 
 ### Handling Different Namespaces
@@ -114,6 +118,55 @@ the `xs:include` tag. Here is an example:
 In this example, `sample_1.xsd` is located in the classpath of the application. The `IncludeFlattener` class will
 correctly resolve this path and include the content of `sample_1.xsd` in the processed XML file.
 
+## Flatten `import`
+
+Use the `ImportFlattener` class.
+
+### Usage
+
+Given the following XML string:
+
+```xml
+
+<xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema" targetNamespace="http://www.sample.com">
+    <xs:import namespace="http://www.different.com" schemaLocation="sample_1.xsd"/>
+    <xs:element name="sample" type="xs:string"/>
+</xs:schema>
+```
+
+Then use the `ImportFlattener` class like so
+
+```kotlin
+val flattener = ImportFlattener()
+val result = flattener.apply(xmlString)
+```
+
+The result will be a `String` that contains the XML content of the processed string with all imported
+files inlined.
+
+Assuming `sample_1.xsd` contains:
+
+```xml
+<?xml version="1.0" encoding="UTF-8"?>
+<xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema" targetNamespace="http://www.different.com">
+    <xs:element name="sample_1" type="xs:string"/>
+</xs:schema>
+```
+
+The expected output will be:
+
+```xml
+<?xml version="1.0" encoding="UTF-8"?>
+<xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema" targetNamespace="http://www.sample.com">
+    <xs:element name="sample" type="xs:string"/>
+    <xs:element name="sample_1" type="xs:string"/>
+</xs:schema>
+```
+
+### Handling Different Namespaces
+
+It's important to note that the final namespace of the processed XML file will be that of the input file.
+
 ## Remove Namespaces
 
 The `NamespaceRemover` class is designed to remove all namespaces from an XML document. This includes defined namespaces
@@ -127,6 +180,7 @@ needs. Here is an example:
 Assume the input file is
 
 ```xml
+
 <xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns:tns="http://www.sample.com"
            targetNamespace="http://www.sample.com">
     <xs:complexType name="complex">

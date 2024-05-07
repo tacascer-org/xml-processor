@@ -11,7 +11,11 @@ private val logger = KotlinLogging.logger {}
 
 private const val CLASSPATH_PREFIX = "classpath:"
 
+/**
+ * Flattens an XML file by inlining all the schemas specified in the `schemaLocation` attribute of the element.
+ */
 internal fun Element.toDocument(): Document {
+    require(name == "import" || name == "include") { "Element must be an import or include element" }
     val inlined = getAttributeValue("schemaLocation")
     logger.info { "Processing inlined schema: $inlined" }
     val schemaURI =
