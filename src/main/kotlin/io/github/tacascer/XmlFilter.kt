@@ -9,7 +9,7 @@ interface XmlFilter {
     /**
      * Applies the filter to the input XML content.
      *
-     * This method is meant to be used when this method is being used in a filter chain.
+     * This method is meant to be used in a filter chain.
      * @param input the XML content to filter
      * @return the filtered XML content
      * @throws Exception if an error occurs during filtering
