@@ -15,23 +15,15 @@ import org.jdom2.filter.Filters
 class IncludeFlattener() : AbstractXmlFilter() {
 
     override fun process(input: Document): Document {
-        val output = input.clone()
-        val includeElements = output.getDescendants(Filters.element()).filter { it.name == "include" }
-        includeElements.forEach(Element::detach)
-        includeElements
-            .map { it.toDocument().inline() }
-            .forEach { includedDocument ->
-                output.rootElement.addContent(
-                    includedDocument.rootElement.getDescendants(Filters.element()).map(Element::clone)
-                )
-            }
-        return output
-    }
-
-    private fun Document.inline(): Document {
-        val inlinedDocument = process(this)
-        val output = inlinedDocument.clone()
-        return output
+        val includeElements = input.getDescendants(Filters.element()).filter { it.name == "include" }
+        includeElements.forEach {
+            val includedDocument = process(it.toDocument())
+            input.rootElement.addContent(
+                includedDocument.rootElement.getDescendants(Filters.element()).map(Element::clone)
+            )
+            it.detach()
+        }
+        return input
     }
 
     override fun toString(): String {

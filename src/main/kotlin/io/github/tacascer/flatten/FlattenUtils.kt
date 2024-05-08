@@ -12,7 +12,7 @@ private val logger = KotlinLogging.logger {}
 private const val CLASSPATH_PREFIX = "classpath:"
 
 /**
- * Flattens an XML file by inlining all the schemas specified in the `schemaLocation` attribute of the element.
+ * Converts an `import` or `include` element to a [Document].
  */
 internal fun Element.toDocument(): Document {
     require(name == "import" || name == "include") { "Element must be an import or include element" }
