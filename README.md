@@ -167,6 +167,20 @@ The expected output will be:
 
 It's important to note that the final namespace of the processed XML file will be that of the input file.
 
+### Classpath Parsing
+
+You can import XML files from the classpath of your application by using the `classpath:` prefix in the `schemaLocation`
+
+#### Example:
+
+```xml
+<?xml version="1.0" encoding="UTF-8"?>
+<xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema" targetNamespace="http://www.sample.com">
+    <xs:import namespace="http://www.different.com" schemaLocation="classpath:sample_1.xsd"/>
+    <xs:element name="sample" type="xs:string"/>
+</xs:schema>
+```
+
 ## Remove Namespaces
 
 The `NamespaceRemover` class is designed to remove all namespaces from an XML document. This includes defined namespaces
