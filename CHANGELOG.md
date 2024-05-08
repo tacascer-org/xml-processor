@@ -1,5 +1,12 @@
 # Changelog
 
+## [0.7.0](https://github.com/tacascer-org/xml-processor/compare/v0.6.0...v0.7.0) (2024-05-08)
+
+
+### Features
+
+* Introduce `ImportFlattener` class for flattening XML imports ([#55](https://github.com/tacascer-org/xml-processor/issues/55)) ([289fafd](https://github.com/tacascer-org/xml-processor/commit/289fafdca5fbd1c0bb1dd49557a90d999ea1dd1a))
+
 ## [0.6.0](https://github.com/tacascer-org/xml-processor/compare/v0.5.0...v0.6.0) (2024-04-27)
 
 
