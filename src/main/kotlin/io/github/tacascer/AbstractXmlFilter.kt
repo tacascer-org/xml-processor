@@ -16,9 +16,6 @@ fun Path.toDocument(): Document = SAXBuilder().build(this.inputStream())
 abstract class AbstractXmlFilter : XmlFilter {
     private val saxBuilder = SAXBuilder()
 
-    /**
-     * Calls [process] with the input XML content and returns the filtered content.
-     */
     override fun apply(input: String): String {
         val output = process(saxBuilder.build(input.byteInputStream()))
         return StringWriter().use {
@@ -27,9 +24,6 @@ abstract class AbstractXmlFilter : XmlFilter {
         }
     }
 
-    /**
-     * Calls [process] with the input XML content and returns the filtered content.
-     */
     override fun process(input: Path): String {
         val output = process(input.toDocument())
         return StringWriter().use {
@@ -38,9 +32,6 @@ abstract class AbstractXmlFilter : XmlFilter {
         }
     }
 
-    /**
-     * Calls [process] with the input XML content and writes the filtered content to the output file.
-     */
     override fun process(input: Path, output: Path) {
         return FileWriter(output.toFile()).use {
             XMLOutputter(Formatters.PRETTY).output(process(input.toDocument()), it)

@@ -1,3 +1,0 @@
-<schema xmlns="http://www.w3.org/2001/XMLSchema">
-    <element name="sampleOne" type="string"/>
-</schema>
