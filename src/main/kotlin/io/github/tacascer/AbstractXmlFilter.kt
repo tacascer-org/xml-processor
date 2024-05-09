@@ -6,6 +6,8 @@ import org.jdom2.output.XMLOutputter
 import java.io.FileWriter
 import java.io.StringWriter
 import java.nio.file.Path
+import kotlin.io.path.createFile
+import kotlin.io.path.exists
 import kotlin.io.path.inputStream
 
 fun Path.toDocument(): Document = SAXBuilder().build(this.inputStream())
@@ -16,6 +18,14 @@ fun Path.toDocument(): Document = SAXBuilder().build(this.inputStream())
 abstract class AbstractXmlFilter : XmlFilter {
     private val saxBuilder = SAXBuilder()
 
+    /**
+     * Applies the filter to the input XML content and returns the filtered content.
+     *
+     * Must call [process] to process the input XML content.
+     *
+     * @param input the XML content to process
+     * @return the filtered XML content
+     */
     override fun apply(input: String): String {
         val output = process(saxBuilder.build(input.byteInputStream()))
         return StringWriter().use {
@@ -24,6 +34,14 @@ abstract class AbstractXmlFilter : XmlFilter {
         }
     }
 
+    /**
+     * Processes the input XML content and returns the filtered content.
+     *
+     * Must call [process] to process the input XML content.
+     *
+     * @param input the XML content to process
+     * @return the filtered XML content
+     */
     override fun process(input: Path): String {
         val output = process(input.toDocument())
         return StringWriter().use {
@@ -32,7 +50,17 @@ abstract class AbstractXmlFilter : XmlFilter {
         }
     }
 
+    /**
+     * Processes the input XML content and writes the filtered content to the output file.
+     * Creates the output file if it does not exist.
+     *
+     * Must call [process] to process the input XML content.
+     *
+     * @param input the XML content to process
+     * @param output the file to write the filtered content to
+     */
     override fun process(input: Path, output: Path) {
+        if (!output.exists()) output.createFile()
         return FileWriter(output.toFile()).use {
             XMLOutputter(Formatters.PRETTY).output(process(input.toDocument()), it)
         }
