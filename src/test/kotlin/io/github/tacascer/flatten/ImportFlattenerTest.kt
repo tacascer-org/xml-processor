@@ -1,5 +1,7 @@
 package io.github.tacascer.flatten
 
+import io.github.tacascer.shouldBeSameCompactedAs
+import io.github.tacascer.shouldBeSamePrettyPrintedAs
 import io.kotest.assertions.throwables.shouldThrow
 import io.kotest.core.spec.style.FunSpec
 import io.kotest.engine.spec.tempdir
@@ -41,12 +43,12 @@ class ImportFlattenerTest : FunSpec({
                 </xs:schema>
                 """.trimIndent()
                 test("should return a single xsd with all elements") {
-                    ImportFlattener().process(importingFile).trimIndent() shouldBe expectedText
+                    ImportFlattener().process(importingFile) shouldBeSamePrettyPrintedAs expectedText
                 }
                 test("process(Path) should write out a single xsd with all elements") {
                     val outputFile = tempfile("output", ".xsd")
                     ImportFlattener().process(importingFile, outputFile.toPath())
-                    outputFile.readText().trimIndent() shouldBe expectedText
+                    outputFile.readText() shouldBeSamePrettyPrintedAs expectedText
                 }
             }
 
@@ -57,7 +59,7 @@ class ImportFlattenerTest : FunSpec({
                     <?xml version="1.0" encoding="UTF-8"?>
                     <xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema" targetNamespace="http://www.sample.com"><xs:element name="sample" type="xs:string" /><xs:element name="sampleOne" type="xs:string" /></xs:schema>
                 """
-                    ImportFlattener().apply(importingFileText).trimIndent() shouldBe expectedText.trimIndent()
+                    ImportFlattener().apply(importingFileText) shouldBeSameCompactedAs expectedText.trimIndent()
                 }
             }
         }
@@ -89,7 +91,7 @@ class ImportFlattenerTest : FunSpec({
             """.trimIndent()
 
             test("should return a single xsd with all elements whose targetNamespace is the input xsd") {
-                ImportFlattener().process(importingFile).trimIndent() shouldBe expectedText
+                ImportFlattener().process(importingFile) shouldBeSamePrettyPrintedAs expectedText
             }
         }
     }
@@ -115,7 +117,7 @@ class ImportFlattenerTest : FunSpec({
             </xs:schema>
             """.trimIndent()
 
-            ImportFlattener().process(importingFile).trimIndent() shouldBe expectedText
+            ImportFlattener().process(importingFile) shouldBeSamePrettyPrintedAs expectedText
         }
     }
 
@@ -158,6 +160,6 @@ class ImportFlattenerTest : FunSpec({
             <xs:element name="sampleTwo" type="xs:string" />
         </xs:schema>
         """.trimIndent()
-        ImportFlattener().process(importingFile).trimIndent() shouldBe expectedText
+        ImportFlattener().process(importingFile) shouldBeSamePrettyPrintedAs expectedText
     }
 })

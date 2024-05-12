@@ -3,9 +3,9 @@ package io.github.tacascer
 import org.jdom2.Document
 import org.jdom2.input.SAXBuilder
 import org.jdom2.output.XMLOutputter
-import java.io.FileWriter
 import java.io.StringWriter
 import java.nio.file.Path
+import kotlin.io.path.bufferedWriter
 import kotlin.io.path.inputStream
 
 fun Path.toDocument(): Document = SAXBuilder().build(this.inputStream())
@@ -58,7 +58,7 @@ abstract class AbstractXmlFilter : XmlFilter {
      */
     override fun process(input: Path, output: Path) {
         output.createFileSafely()
-        return FileWriter(output.toFile()).use {
+        output.bufferedWriter().use {
             XMLOutputter(Formatters.PRETTY).output(process(input.toDocument()), it)
         }
     }

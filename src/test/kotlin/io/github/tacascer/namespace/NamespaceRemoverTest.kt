@@ -1,8 +1,9 @@
 package io.github.tacascer.namespace
 
+import io.github.tacascer.shouldBeSameCompactedAs
+import io.github.tacascer.shouldBeSamePrettyPrintedAs
 import io.kotest.core.spec.style.FunSpec
 import io.kotest.engine.spec.tempfile
-import io.kotest.matchers.shouldBe
 import org.intellij.lang.annotations.Language
 import kotlin.io.path.readText
 import kotlin.io.path.writeText
@@ -48,7 +49,7 @@ class NamespaceRemoverTest : FunSpec({
             inputPath.writeText(input)
 
             test("apply(String) should remove all namespaces") {
-                NamespaceRemover().process(inputPath).replace("\r\n", "\n") shouldBe expected
+                NamespaceRemover().process(inputPath) shouldBeSamePrettyPrintedAs expected
             }
 
             test("process(Path) should remove all namespaces") {
@@ -56,7 +57,7 @@ class NamespaceRemoverTest : FunSpec({
 
                 NamespaceRemover().process(inputPath, outputPath)
 
-                outputPath.readText().lines().joinToString("\n") shouldBe expected
+                outputPath.readText() shouldBeSamePrettyPrintedAs expected
             }
         }
 
@@ -64,11 +65,10 @@ class NamespaceRemoverTest : FunSpec({
             @Language("XML") val expected = """
                 <?xml version="1.0" encoding="UTF-8"?>
                 <xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema" targetNamespace="http://www.sample.com"><xs:complexType name="complex"><xs:sequence><xs:element name="simple" type="xs:string" /></xs:sequence></xs:complexType><xs:element name="sample" type="xs:string" /><xs:element name="complex" type="complex" /><bindings><globalBindings /></bindings></xs:schema>
-                
             """.trimIndent()
 
             test("apply(String) should remove all namespaces") {
-                NamespaceRemover().apply(input).lines().joinToString("\n") shouldBe expected
+                NamespaceRemover().apply(input) shouldBeSameCompactedAs expected
             }
         }
     }
