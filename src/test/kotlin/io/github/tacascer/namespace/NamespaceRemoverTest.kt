@@ -72,10 +72,4 @@ class NamespaceRemoverTest : FunSpec({
             }
         }
     }
-
-    context("non functional tests") {
-        test("toString() should return the class name") {
-            NamespaceRemover().toString() shouldBe "NamespaceRemover()"
-        }
-    }
 })

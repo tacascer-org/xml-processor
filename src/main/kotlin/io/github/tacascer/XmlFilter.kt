@@ -27,6 +27,7 @@ interface XmlFilter {
 
     /**
      * Processes the XML file and writes the filtered content to the output file.
+     * Creates the output file if it does not exist.
      *
      * Will pretty format the output using [org.jdom2.output.Format.getPrettyFormat].
      * @param input the path to the XML file to process

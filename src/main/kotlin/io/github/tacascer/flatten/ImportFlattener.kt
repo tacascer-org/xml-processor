@@ -23,8 +23,4 @@ class ImportFlattener : AbstractXmlFilter() {
         }
         return input
     }
-
-    override fun toString(): String {
-        return "ImportFlattener()"
-    }
 }

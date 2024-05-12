@@ -16,7 +16,6 @@ fun Path.toDocument(): Document = SAXBuilder().build(this.inputStream())
  * Abstract implementation of [XmlFilter] that provides default implementations for processing XML content.
  */
 abstract class AbstractXmlFilter : XmlFilter {
-    private val saxBuilder = SAXBuilder()
 
     /**
      * Applies the filter to the input XML content and returns the filtered content.
@@ -27,7 +26,7 @@ abstract class AbstractXmlFilter : XmlFilter {
      * @return the filtered XML content
      */
     override fun apply(input: String): String {
-        val output = process(saxBuilder.build(input.byteInputStream()))
+        val output = process(SAXBuilder().build(input.byteInputStream()))
         return StringWriter().use {
             XMLOutputter(Formatters.COMPACT).output(output, it)
             it.toString()

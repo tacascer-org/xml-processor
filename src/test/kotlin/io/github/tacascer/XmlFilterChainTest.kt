@@ -2,6 +2,7 @@ package io.github.tacascer
 
 import io.kotest.core.spec.style.FunSpec
 import io.kotest.engine.spec.tempfile
+import io.kotest.matchers.paths.shouldExist
 import io.kotest.matchers.shouldBe
 import java.nio.file.Path
 
@@ -57,9 +58,13 @@ class XmlFilterChainTest : FunSpec({
         outputFile.readText() shouldBe "ccc"
     }
 
-    context("non functional tests") {
-        test("toString() works") {
-            filterChain.toString() shouldBe "XmlFilterChain(filters=[$filterOne, $filterTwo])"
-        }
+    test("process(Path, Path) creates the output file if it does not exist") {
+        val inputFile = tempfile()
+        inputFile.writeText("abc")
+        val outputFile = inputFile.resolveSibling("output.xsd").toPath()
+
+        filterChain.process(inputFile.toPath(), outputFile)
+
+        outputFile.shouldExist()
     }
 })
