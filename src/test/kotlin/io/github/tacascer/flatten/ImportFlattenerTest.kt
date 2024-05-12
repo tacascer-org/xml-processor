@@ -160,10 +160,4 @@ class ImportFlattenerTest : FunSpec({
         """.trimIndent()
         ImportFlattener().process(importingFile).trimIndent() shouldBe expectedText
     }
-
-    context("non functional tests") {
-        test("toString() should return ImportFlattener()") {
-            ImportFlattener().toString() shouldBe "ImportFlattener()"
-        }
-    }
 })

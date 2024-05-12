@@ -1,6 +1,9 @@
 package io.github.tacascer
 
+import dev.drewhamilton.poko.Poko
 import java.nio.file.Path
+import kotlin.io.path.createFile
+import kotlin.io.path.exists
 import kotlin.io.path.readText
 import kotlin.io.path.writeText
 
@@ -10,6 +13,7 @@ import kotlin.io.path.writeText
  *
  * @constructor Creates an instance of XmlFilterChain with the given list of [filters].
  */
+@Poko
 class XmlFilterChain(private val filters: List<XmlFilter>) : XmlFilter {
 
     /**
@@ -39,17 +43,14 @@ class XmlFilterChain(private val filters: List<XmlFilter>) : XmlFilter {
      * Reads the content of the input file, applies all the filters in the chain to the content,
      * and writes the processed content to the output file.
      * The filters are applied in the order they are added to the chain.
-     * If the output file already exists, it will be replaced.
+     * Creates the output file if it does not exist.
      *
      * @param input The path to the input file to be processed.
      * @param output The path to the output file where the processed content will be written.
      */
     override fun process(input: Path, output: Path) {
+        if (!output.exists()) output.createFile()
         val content = process(input)
         output.writeText(content)
-    }
-
-    override fun toString(): String {
-        return "XmlFilterChain(filters=$filters)"
     }
 }

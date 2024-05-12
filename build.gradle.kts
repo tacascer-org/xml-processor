@@ -4,6 +4,7 @@ plugins {
     `java-library`
     id("com.adarshr.test-logger") version "4.0.0"
     id("com.vanniktech.maven.publish") version "0.28.0"
+    id("dev.drewhamilton.poko") version "0.15.2"
     id("org.jetbrains.dokka") version "1.9.20"
     id("org.jetbrains.kotlinx.kover") version "0.7.6"
     id("org.sonarqube") version "5.0.0.4638"
