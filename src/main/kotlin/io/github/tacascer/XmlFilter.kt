@@ -1,6 +1,9 @@
 package io.github.tacascer
 
 import java.nio.file.Path
+import kotlin.io.path.createFile
+import kotlin.io.path.createParentDirectories
+import kotlin.io.path.exists
 
 /**
  * Generic interface for filtering XML content.
@@ -34,4 +37,11 @@ interface XmlFilter {
      * @param output the path to the output file
      */
     fun process(input: Path, output: Path)
+}
+
+internal fun Path.createFileSafely() {
+    if (!exists()) {
+        createParentDirectories()
+        createFile()
+    }
 }

@@ -2,8 +2,6 @@ package io.github.tacascer
 
 import dev.drewhamilton.poko.Poko
 import java.nio.file.Path
-import kotlin.io.path.createFile
-import kotlin.io.path.exists
 import kotlin.io.path.readText
 import kotlin.io.path.writeText
 
@@ -49,7 +47,7 @@ class XmlFilterChain(private val filters: List<XmlFilter>) : XmlFilter {
      * @param output The path to the output file where the processed content will be written.
      */
     override fun process(input: Path, output: Path) {
-        if (!output.exists()) output.createFile()
+        output.createFileSafely()
         val content = process(input)
         output.writeText(content)
     }
