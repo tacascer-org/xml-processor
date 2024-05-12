@@ -1,5 +1,13 @@
 # Changelog
 
+## [0.7.3](https://github.com/tacascer-org/xml-processor/compare/v0.7.2...v0.7.3) (2024-05-12)
+
+
+### Bug Fixes
+
+* Create parent directories if file doesn't exist ([#63](https://github.com/tacascer-org/xml-processor/issues/63)) ([8010fec](https://github.com/tacascer-org/xml-processor/commit/8010fec798769f3224204571bbef7bf447c8e48b))
+* **XmlFilterChain:** pretty format output of process(Path, Path) ([#65](https://github.com/tacascer-org/xml-processor/issues/65)) ([181f2cf](https://github.com/tacascer-org/xml-processor/commit/181f2cfb40537ac178ec94ab8cd8a9af6fc6be8d))
+
 ## [0.7.2](https://github.com/tacascer-org/xml-processor/compare/v0.7.1...v0.7.2) (2024-05-12)
 
 
