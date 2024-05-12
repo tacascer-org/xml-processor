@@ -3,8 +3,8 @@ package io.github.tacascer
 import dev.drewhamilton.poko.Poko
 import org.jdom2.input.SAXBuilder
 import org.jdom2.output.XMLOutputter
-import java.io.FileWriter
 import java.nio.file.Path
+import kotlin.io.path.bufferedWriter
 import kotlin.io.path.readText
 
 /**
@@ -51,7 +51,7 @@ class XmlFilterChain(private val filters: List<XmlFilter>) : XmlFilter {
     override fun process(input: Path, output: Path) {
         output.createFileSafely()
         val content = process(input)
-        FileWriter(output.toFile()).use {
+        output.bufferedWriter().use {
             XMLOutputter(Formatters.PRETTY).output(SAXBuilder().build(content.byteInputStream()), it)
         }
     }
