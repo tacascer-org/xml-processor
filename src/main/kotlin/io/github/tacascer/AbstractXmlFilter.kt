@@ -58,7 +58,7 @@ abstract class AbstractXmlFilter : XmlFilter {
      */
     override fun process(input: Path, output: Path) {
         output.createFileSafely()
-        return FileWriter(output.toFile()).use {
+        FileWriter(output.toFile()).use {
             XMLOutputter(Formatters.PRETTY).output(process(input.toDocument()), it)
         }
     }

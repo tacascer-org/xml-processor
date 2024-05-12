@@ -1,5 +1,7 @@
 package io.github.tacascer.flatten
 
+import io.github.tacascer.shouldBeSameCompactedAs
+import io.github.tacascer.shouldBeSamePrettyPrintedAs
 import io.kotest.assertions.throwables.shouldThrow
 import io.kotest.core.spec.style.FunSpec
 import io.kotest.engine.spec.tempdir
@@ -41,12 +43,12 @@ class IncludeFlattenerTest : FunSpec({
                 </xs:schema>
                 """.trimIndent()
                 test("should return a single xsd with all elements") {
-                    IncludeFlattener().process(includingFile).trimIndent() shouldBe expectedText
+                    IncludeFlattener().process(includingFile) shouldBeSamePrettyPrintedAs expectedText
                 }
                 test("process(Path) should write out a single xsd with all elements") {
                     val outputFile = tempfile("output", ".xsd")
                     IncludeFlattener().process(includingFile, outputFile.toPath())
-                    outputFile.readText().trimIndent() shouldBe expectedText
+                    outputFile.readText() shouldBeSamePrettyPrintedAs expectedText
                 }
             }
 
@@ -57,7 +59,7 @@ class IncludeFlattenerTest : FunSpec({
                     <?xml version="1.0" encoding="UTF-8"?>
                     <xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema" targetNamespace="http://www.sample.com"><xs:element name="sample" type="xs:string" /><xs:element name="sampleOne" type="xs:string" /></xs:schema>
                 """
-                    IncludeFlattener().apply(includingFileText).trimIndent() shouldBe expectedText.trimIndent()
+                    IncludeFlattener().apply(includingFileText) shouldBeSameCompactedAs expectedText.trimIndent()
                 }
             }
         }
@@ -89,7 +91,7 @@ class IncludeFlattenerTest : FunSpec({
             """.trimIndent()
 
             test("should return a single xsd with all elements whose targetNamespace is the input xsd") {
-                IncludeFlattener().process(includingFile).trimIndent() shouldBe expectedText
+                IncludeFlattener().process(includingFile) shouldBeSamePrettyPrintedAs expectedText
             }
         }
     }
@@ -115,7 +117,7 @@ class IncludeFlattenerTest : FunSpec({
             </xs:schema>
             """.trimIndent()
 
-            IncludeFlattener().process(includingFile).trimIndent() shouldBe expectedText
+            IncludeFlattener().process(includingFile) shouldBeSamePrettyPrintedAs expectedText
         }
     }
 
@@ -158,6 +160,6 @@ class IncludeFlattenerTest : FunSpec({
             <xs:element name="sampleTwo" type="xs:string" />
         </xs:schema>
         """.trimIndent()
-        IncludeFlattener().process(includingFile).trimIndent() shouldBe expectedText
+        IncludeFlattener().process(includingFile) shouldBeSamePrettyPrintedAs expectedText
     }
 })

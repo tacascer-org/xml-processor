@@ -1,9 +1,11 @@
 package io.github.tacascer
 
 import dev.drewhamilton.poko.Poko
+import org.jdom2.input.SAXBuilder
+import org.jdom2.output.XMLOutputter
+import java.io.FileWriter
 import java.nio.file.Path
 import kotlin.io.path.readText
-import kotlin.io.path.writeText
 
 /**
  * Represents a chain of [XmlFilter] instances. Is itself a [XmlFilter].
@@ -49,6 +51,8 @@ class XmlFilterChain(private val filters: List<XmlFilter>) : XmlFilter {
     override fun process(input: Path, output: Path) {
         output.createFileSafely()
         val content = process(input)
-        output.writeText(content)
+        FileWriter(output.toFile()).use {
+            XMLOutputter(Formatters.PRETTY).output(SAXBuilder().build(content.byteInputStream()), it)
+        }
     }
 }
