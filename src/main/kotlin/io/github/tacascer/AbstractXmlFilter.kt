@@ -6,6 +6,9 @@ import org.jdom2.output.XMLOutputter
 import java.io.FileWriter
 import java.io.StringWriter
 import java.nio.file.Path
+import kotlin.io.path.createFile
+import kotlin.io.path.createParentDirectories
+import kotlin.io.path.exists
 import kotlin.io.path.inputStream
 
 fun Path.toDocument(): Document = SAXBuilder().build(this.inputStream())
@@ -57,7 +60,10 @@ abstract class AbstractXmlFilter : XmlFilter {
      * @param output the file to write the filtered content to
      */
     override fun process(input: Path, output: Path) {
-        output.createFileSafely()
+        if (!output.exists()) {
+            output.createParentDirectories()
+            output.createFile()
+        }
         return FileWriter(output.toFile()).use {
             XMLOutputter(Formatters.PRETTY).output(process(input.toDocument()), it)
         }
