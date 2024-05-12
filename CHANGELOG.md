@@ -1,5 +1,12 @@
 # Changelog
 
+## [0.7.2](https://github.com/tacascer-org/xml-processor/compare/v0.7.1...v0.7.2) (2024-05-12)
+
+
+### Bug Fixes
+
+* **XmlFilterChain:** create new file if it doesn't exist ([#60](https://github.com/tacascer-org/xml-processor/issues/60)) ([238eca4](https://github.com/tacascer-org/xml-processor/commit/238eca49f6ed441c12c9e15926bd97306503d9d9))
+
 ## [0.7.1](https://github.com/tacascer-org/xml-processor/compare/v0.7.0...v0.7.1) (2024-05-09)
 
 
