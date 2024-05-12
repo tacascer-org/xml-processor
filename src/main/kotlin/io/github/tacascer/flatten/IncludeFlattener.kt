@@ -25,8 +25,4 @@ class IncludeFlattener() : AbstractXmlFilter() {
         }
         return input
     }
-
-    override fun toString(): String {
-        return "IncludeFlattener()"
-    }
 }
