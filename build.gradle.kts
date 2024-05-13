@@ -18,7 +18,7 @@ repositories {
     mavenCentral()
 }
 
-val kotestVersion = "5.8.1"
+val kotestVersion = "5.9.0"
 val jdomVersion = "2.0.6.1"
 val jetbrainsAnnotationVersion = "24.1.0"
 val jaxenVersion = "2.0.0"
