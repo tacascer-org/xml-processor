@@ -8,7 +8,7 @@ import java.nio.file.Path
 import kotlin.io.path.bufferedWriter
 import kotlin.io.path.inputStream
 
-fun Path.toDocument(): Document = SAXBuilder().build(this.inputStream())
+internal fun Path.toDocument(): Document = SAXBuilder().build(this.inputStream())
 
 /**
  * Abstract implementation of [XmlFilter] that provides default implementations for processing XML content.
