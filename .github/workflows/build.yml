@@ -24,3 +24,6 @@ jobs:
       java-version: 17
       runs-on: ${{ matrix.os }}
     secrets: inherit
+    permissions:
+      security-events: write
+      contents: write
