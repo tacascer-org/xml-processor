@@ -1,6 +1,6 @@
 # xml-processor
 
-[ ![Maven  Central Version](https://img.shields.io/maven-central/v/io.github.tacascer/xml-processor?style=for-the-badge&logo=apache%20maven)](https://central.sonatype.com/artifact/io.github.tacascer/xml-processor)
+[![Maven Central Version](https://img.shields.io/maven-central/v/io.github.tacascer/xml-processor?style=for-the-badge&logo=apache%20maven)](https://central.sonatype.com/artifact/io.github.tacascer/xml-processor)
 [![javadoc](https://javadoc.io/badge2/io.github.tacascer/xml-processor/javadoc.svg?style=for-the-badge)](https://javadoc.io/doc/io.github.tacascer/xml-processor)
 
 ![Build](https://github.com/tacascer-org/xml-processor/actions/workflows/build.yml/badge.svg?branch=main)
