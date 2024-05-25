@@ -10,18 +10,20 @@ import org.jdom2.Document
 class AbstractXmlFilterTest : FunSpec({
     test("given an output file that does not exist, when process(Path, Path) is called, then it should create the file") {
         // Given
-        val filter = object : AbstractXmlFilter() {
-            override fun process(input: Document): Document {
-                return input
+        val filter =
+            object : AbstractXmlFilter() {
+                override fun process(input: Document): Document {
+                    return input
+                }
             }
-        }
 
         @Language("XML")
-        val inputText = """
-           <xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema">
-               <xs:element name="sample" type="xs:string"/> 
-           </xs:schema>
-        """.trimIndent()
+        val inputText =
+            """
+            <xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema">
+                <xs:element name="sample" type="xs:string"/> 
+            </xs:schema>
+            """.trimIndent()
         val inputFile = tempfile().also { it.writeText(inputText) }
 
         val testDir = tempdir()

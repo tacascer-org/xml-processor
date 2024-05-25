@@ -36,7 +36,10 @@ interface XmlFilter {
      * @param input the path to the XML file to process
      * @param output the path to the output file
      */
-    fun process(input: Path, output: Path)
+    fun process(
+        input: Path,
+        output: Path,
+    )
 }
 
 internal fun Path.createFileSafely() {
