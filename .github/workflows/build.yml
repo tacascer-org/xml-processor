@@ -27,6 +27,6 @@ jobs:
       runs-on: ${{ matrix.os }}
     secrets: inherit
     permissions:
-      checks: write
+      statuses: write
       security-events: write
       contents: write
