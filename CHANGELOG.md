@@ -1,5 +1,12 @@
 # Changelog
 
+## [0.7.4](https://github.com/tacascer-org/xml-processor/compare/v0.7.3...v0.7.4) (2024-05-25)
+
+
+### Bug Fixes
+
+* **api:** don't expose `toDocument` function ([#69](https://github.com/tacascer-org/xml-processor/issues/69)) ([6721d05](https://github.com/tacascer-org/xml-processor/commit/6721d0581c79d48a2ed289c8ad2a6f32bc0908b1))
+
 ## [0.7.3](https://github.com/tacascer-org/xml-processor/compare/v0.7.2...v0.7.3) (2024-05-12)
 
 
