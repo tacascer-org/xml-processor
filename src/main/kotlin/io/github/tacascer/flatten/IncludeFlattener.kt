@@ -13,13 +13,12 @@ import org.jdom2.filter.Filters
  * [XML Inclusions](https://www.w3schools.com/xml/el_include.asp)
  */
 class IncludeFlattener() : AbstractXmlFilter() {
-
     override fun process(input: Document): Document {
         val includeElements = input.getDescendants(Filters.element()).filter { it.name == "include" }
         includeElements.forEach {
             val includedDocument = process(it.toDocument())
             input.rootElement.addContent(
-                includedDocument.rootElement.getDescendants(Filters.element()).map(Element::clone)
+                includedDocument.rootElement.getDescendants(Filters.element()).map(Element::clone),
             )
             it.detach()
         }

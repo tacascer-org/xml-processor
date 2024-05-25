@@ -64,7 +64,7 @@ sonar {
         property("sonar.host.url", "https://sonarcloud.io")
         property(
             "sonar.coverage.jacoco.xmlReportPaths",
-            "${layout.buildDirectory.asFile.get()}/reports/kover/report.xml"
+            "${layout.buildDirectory.asFile.get()}/reports/kover/report.xml",
         )
     }
 }

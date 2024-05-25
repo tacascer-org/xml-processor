@@ -14,7 +14,6 @@ internal fun Path.toDocument(): Document = SAXBuilder().build(this.inputStream()
  * Abstract implementation of [XmlFilter] that provides default implementations for processing XML content.
  */
 abstract class AbstractXmlFilter : XmlFilter {
-
     /**
      * Applies the filter to the input XML content and returns the filtered content.
      *
@@ -56,7 +55,10 @@ abstract class AbstractXmlFilter : XmlFilter {
      * @param input the XML content to process
      * @param output the file to write the filtered content to
      */
-    override fun process(input: Path, output: Path) {
+    override fun process(
+        input: Path,
+        output: Path,
+    ) {
         output.createFileSafely()
         output.bufferedWriter().use {
             XMLOutputter(Formatters.PRETTY).output(process(input.toDocument()), it)
