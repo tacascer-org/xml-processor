@@ -12,7 +12,7 @@ plugins {
 }
 
 group = "io.github.tacascer"
-version = "0.7.3" // x-release-please-version
+version = "0.7.4" // x-release-please-version
 
 repositories {
     mavenCentral()
