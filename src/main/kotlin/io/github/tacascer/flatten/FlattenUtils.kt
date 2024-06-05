@@ -22,6 +22,8 @@ internal fun Element.toDocument(): Document {
         if (inlined.startsWith(CLASSPATH_PREFIX)) {
             this::class.java.classLoader.getResource(inlined.removePrefix(CLASSPATH_PREFIX))?.toURI()
                 ?: throw IllegalArgumentException("Imported schema not found: $inlined")
-        } else URI(inlined)
+        } else {
+            URI(inlined)
+        }
     return schemaURI.toPath().toDocument()
 }

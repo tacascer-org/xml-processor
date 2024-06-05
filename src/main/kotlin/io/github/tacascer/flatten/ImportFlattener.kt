@@ -18,7 +18,9 @@ class ImportFlattener : AbstractXmlFilter() {
         val importElements = input.getDescendants(Filters.element()).filter { it.name == "import" }
         importElements.forEach {
             val importedDocument = process(it.toDocument())
-            input.rootElement.addContent(importedDocument.rootElement.getDescendants(Filters.element()).map(Element::clone))
+            input.rootElement.addContent(
+                importedDocument.rootElement.getDescendants(Filters.element()).map(Element::clone),
+            )
             it.detach()
         }
         return input
