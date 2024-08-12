@@ -22,7 +22,7 @@ val kotestVersion = "5.9.1"
 val jdomVersion = "2.0.6.1"
 val jetbrainsAnnotationVersion = "24.1.0"
 val jaxenVersion = "2.0.0"
-val slf4jSimpleVersion = "2.0.13"
+val slf4jSimpleVersion = "2.0.16"
 val kotlinLoggingVersion = "7.0.0"
 
 dependencies {
