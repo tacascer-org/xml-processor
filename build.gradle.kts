@@ -7,7 +7,7 @@ plugins {
     id("dev.drewhamilton.poko") version "0.17.2"
     id("org.jetbrains.dokka") version "1.9.20"
     id("org.jetbrains.kotlinx.kover") version "0.8.3"
-    id("org.sonarqube") version "5.1.0.4882"
+    id("org.sonarqube") version "6.0.0.5145"
     kotlin("jvm") version "2.0.21"
 }
 
