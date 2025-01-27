@@ -20,7 +20,7 @@ repositories {
 
 val kotestVersion = "5.9.1"
 val jdomVersion = "2.0.6.1"
-val jetbrainsAnnotationVersion = "26.0.1"
+val jetbrainsAnnotationVersion = "26.0.2"
 val jaxenVersion = "2.0.0"
 val slf4jSimpleVersion = "2.0.16"
 val kotlinLoggingVersion = "7.0.3"
