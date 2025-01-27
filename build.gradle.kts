@@ -8,7 +8,7 @@ plugins {
     id("org.jetbrains.dokka") version "2.0.0"
     id("org.jetbrains.kotlinx.kover") version "0.9.1"
     id("org.sonarqube") version "6.0.1.5171"
-    kotlin("jvm") version "2.1.0"
+    kotlin("jvm") version "2.1.10"
 }
 
 group = "io.github.tacascer"
