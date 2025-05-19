@@ -28,6 +28,6 @@ jobs:
           ORG_GRADLE_PROJECT_signingInMemoryKeyPassword: ${{secrets.MAVEN_CENTRAL_GPG_PASSWORD}}
         run: ./gradlew publishAndReleaseToMavenCentral --no-configuration-cache
       - name: Upload SBOM
-        uses: anchore/sbom-action@v0.17.9
+        uses: anchore/sbom-action@v0.20.0
         with:
           path: ./build/libs
