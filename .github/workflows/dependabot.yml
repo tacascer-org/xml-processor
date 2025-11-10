@@ -8,7 +8,7 @@ permissions: { }
 
 jobs:
   dependabot:
-    uses: tacascer-org/actions-workflows/.github/workflows/approve_dependabot.yml@v0.2.3
+    uses: tacascer-org/actions-workflows/.github/workflows/approve_dependabot.yml@v0.5.2
     permissions:
       pull-requests: write
       contents: write
